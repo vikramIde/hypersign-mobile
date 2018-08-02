@@ -25,6 +25,8 @@ export default new VueRouter({
     { path: '*', component: load('Error404') } ,// Not found
     { path: '/', component: load('Home') }, // Default
     { path: '/home', component: load('Index') }, // Default
+    { path: '/wallet', component: load('Wallet') }, // wallet
+    { path: '/signtx', component: load('sign-tx') }, // Default
     { path: '/stockin', component: load('stockin') }, // Default
     { path: '/stockout', component: load('stockout') }, // Default
     { path: '/help', component: load('help') },

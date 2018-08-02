@@ -1,54 +1,48 @@
 <template>
-  <div class="error-page window-height window-width bg-light column items-center">
-    <div class="error-code bg-primary flex items-center justify-center">
-      Nano Corp
-    </div>
-    <div>
-      <div class="error-card card bg-white column items-center justify-center">
-        <!-- <i class="text-grey-5">error_outline</i> -->
-        <p class="caption text-center">Register Screen...</p>
-        <p class="">
-          <div class="list">
-            <div class="item two-lines">
-             <!-- <i class="item-primary">edit</i>-->
-              <div class="item-content">
-                <input class="full-width" v-model="form.username" placeholder="Type Username">
-              </div>
-            </div>
-            <hr>
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" type="password" v-model="form.password" placeholder="Type password">
-              </div>
-            </div>
-            <hr>
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" v-model="form.email" placeholder="Type email">
-              </div>
-            </div>
-          </div>
-          
-          <!-- Regular shaped -->
-          <button class="primary" @click="generate()">
-            Register
-          </button>
-          <router-link to="/help" v-if="batch==true">
-            <button class="grey push small">
-              Go home
-              <!-- <i class="on-right">Enter</i> -->
-            </button>
-          </router-link>
-        </p>
-      </div>
-    </div>
+  <q-layout>
+     <!-- Header -->
+  <div slot="header" class="toolbar">
+    <q-toolbar-title :padding="1">
+      Scan Stock (beta)
+    </q-toolbar-title>
   </div>
+  <!-- Navigation Tabs -->
+  <q-tabs slot="navigation">
+    <q-tab icon="alarm" route="/stockin" exact replace>Wallet</q-tab>
+    <q-tab icon="alarm" route="/signtx" exact replace>Scan QR</q-tab>
+    <!-- <q-tab icon="help" route="/help" exact replace>Profile</q-tab>
+    <q-tab icon="help" route="/sync" exact replace>sync</q-tab> -->
+  </q-tabs>
+  <!-- IF USING subRoutes only: -->
+  <!-- <router-view class="layout-view"></router-view> -->
+  <!-- OR ELSE, IF NOT USING subRoutes: -->
+  <div class="layout-padding">
+      <blockquote v-for="(item, id) in userDetails" :key = "id">
+          <b>Account : </b> 
+          <small>
+            {{ item.public_key }}
+          </small>
+
+          <b>User Name : </b> 
+          <small>
+            {{ item.form_data.username }}
+          </small>
+
+      </blockquote>
+      
+  </div>
+
+
+  <!-- Footer -->
+  <div slot="footer" class="toolbar">
+    All right reserved Nano Corporatio 
+  </div>
+  </q-layout>
 </template>
 
 <script>
 import store from './product-store'
 import userStore from './user-store'
-import keyStore from './key-store'
 import { Toast,Loading,Dialog } from 'quasar'
 import Router from 'router'
     // var web3 = new Web3();
@@ -70,16 +64,11 @@ import Router from 'router'
         // })
     }
 
-    function addUserDet(public_key, form_data) {
+    function addUserDet(public_key, user_name) {
       let id = Math.random().toString(36).substr(2, 9)
 
-      userStore.set(id, {public_key,form_data})
+      userStore.set(id, {public_key,user_name})
       Toast.create.positive('Successfully registered!')
-    }
-
-    function addKeyStore(key){
-      let id = Math.random().toString(36).substr(2, 9)
-      keyStore.set(id,{key});
     }
 
     function onFileSystemSuccess(fileSystem) {
@@ -127,14 +116,16 @@ import Router from 'router'
 
 export default {
   mounted(){
+    debugger
       console.log('Componenet Mounted');
-      this.userStore.clear()
       const url = appconfig.dev.BASE_URL+'/api/product_check_in/';
+      console.log(this.userDetails)
       this.checkFile();
   },
   data () {
     return {
         itemsInStock:store.state,
+        userDetails : userStore.state,
         form:{username:'',password:'',email:''}
     }
   },
@@ -166,11 +157,8 @@ export default {
       }, (err, ks) => {
         debugger
         global_keystore = ks
-        
-        //addKeyStore(global_keystore)
-        window.key_Store = ks
+                
         this.newAddresses(password);
-
         //setWeb3Provider(global_keystore);
         //getBalances();
     })
@@ -184,15 +172,15 @@ export default {
 
         var numAddr = parseInt(1) //provide number of accounts you want to create
 
-        global_keystore.keyFromPassword(password, (err, pwDerivedKey) => {
+        global_keystore.keyFromPassword(password, function(err, pwDerivedKey) {
             debugger
             global_keystore.generateNewAddress(pwDerivedKey, numAddr);
 
             var addresses = global_keystore.getAddresses()
             for (var i=0; i<addresses.length; ++i) {
-              addUserDet(addresses[i],this.form)
-              Router.replace({ path: 'wallet' })
-              //console.log('Address = ' + addresses[i])
+              
+              Router.replace({ path: 'help' })
+              console.log('Address = ' + addresses[i])
             }
 
             //getBalances();
