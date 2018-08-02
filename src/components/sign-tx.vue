@@ -164,29 +164,27 @@ export default {
     triggerSignTx () {
       debugger
       if (lightwallet) {
-        let from  = "702136e1319171d59f1e1f6be57fe1d7bda6e49e"
+        let from  = key_Store.addresses[0]
        
 
-// lightwallet.signing.signMsg
+let message  = "Text to sign"
+///Signing .......
+         let signedMsg = lightwallet.signing.signMsg(key_Store, pwDerivedKey, message, from )
+         console.log(signedMsg)
 
-// keystore, 
-// pwDerivedKey, 
-// rawMsg, 
-// signingAddress
+          if(signedMsg){
 
-        lightwallet.keystore.prototype.keyFromPassword('Vishwas', (err, pwDerivedKey) => { 
-            if(err) { console.log(err)}
-            else {
-              debugger
-              //let keystore = this.keyStore.t482o13t0.key
-              lightwallet.signing.signMsg(key_Store, pwDerivedKey, "Text to sign", key_Store.addresses[0], function(signedTx){
-                debugger
+            ///Verifying.......
+            let generatedPublicKeyBytes = lightwallet.signing.recoverAddress(message, signedMsg.v, signedMsg.r, signedMsg.s)
+              let win1251decoder = new TextDecoder('utf-8');
+              let generatedPublicKey =  win1251decoder.decode(generatedPublicKeyBytes); 
+              if (generatedPublicKey === from ){
+                console.log("Validation Successfull!")
 
-              })
-            }
+              }
 
-           
-          })
+          }
+          
       }
 
     },

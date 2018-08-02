@@ -186,6 +186,7 @@ export default {
 
         global_keystore.keyFromPassword(password, (err, pwDerivedKey) => {
             debugger
+            window.pwDerivedKey = pwDerivedKey  
             global_keystore.generateNewAddress(pwDerivedKey, numAddr);
 
             var addresses = global_keystore.getAddresses()
