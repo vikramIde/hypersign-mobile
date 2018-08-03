@@ -3,7 +3,7 @@
      <!-- Header -->
   <div slot="header" class="toolbar">
     <q-toolbar-title :padding="1">
-      Scan Stock (beta)
+      Hypersign (beta)
     </q-toolbar-title>
   </div>
   <!-- Navigation Tabs -->
@@ -141,9 +141,9 @@ export default {
     // }
   },
   methods: {
-	generate () {
+  generate () {
     
-	  var form = this.form;
+    var form = this.form;
     debugger
     var randomSeed = lightwallet.keystore.generateRandomSeed();
     //give  this randomSeed  to the user to save
@@ -162,7 +162,7 @@ export default {
         //setWeb3Provider(global_keystore);
         //getBalances();
     })
-	},
+  },
 
   newAddresses (password) {
         debugger
