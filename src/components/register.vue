@@ -160,9 +160,9 @@ import Router from 'router'
 export default {
   mounted(){
       console.log('Componenet Mounted');
-      this.userStore.clear()
-      const url = appconfig.dev.BASE_URL+'/api/product_check_in/';
-      this.checkFile();
+      // this.userStore.clear()
+      // const url = appconfig.dev.BASE_URL+'/api/product_check_in/';
+      // this.checkFile();
   },
   data () {
     return {
@@ -251,6 +251,12 @@ export default {
             }
             
         });
+    },
+    login(){
+      Router.replace({ path: '/' })
+    },
+    register(){
+      Router.replace({ path: 'register' })
     }
   }
 }
