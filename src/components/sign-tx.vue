@@ -176,8 +176,7 @@ let message  = "Text to sign"
 
             ///Verifying.......
             let generatedPublicKeyBytes = lightwallet.signing.recoverAddress(message, signedMsg.v, signedMsg.r, signedMsg.s)
-              let win1251decoder = new TextDecoder('utf-8');
-              let generatedPublicKey =  win1251decoder.decode(generatedPublicKeyBytes); 
+              let generatedPublicKey = this.toHexString(generatedPublicKeyBytes)
               if (generatedPublicKey === from ){
                 console.log("Validation Successfull!")
 
@@ -188,6 +187,12 @@ let message  = "Text to sign"
       }
 
     },
+
+     toHexString(byteArray) {
+  return Array.prototype.map.call(byteArray, function(byte) {
+    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+  }).join('');
+},
     checkFile(){
       let scope = this;
        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
