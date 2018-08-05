@@ -3,12 +3,13 @@ import { LocalStorage } from 'quasar'
 
 export default {
   state: LocalStorage.get.item('user-det') || {},
-  set (id, item) {
-    Vue.set(this.state, id, item)
-    LocalStorage.set('user-det', this.state)
+  set (id,item) {
+    debugger
+    // Vue.set(this.state,id, item)
+    LocalStorage.set('user-det', item)
   },
-  del (id) {
-    Vue.delete(this.state, id)
+  del () {
+    Vue.delete(this.state,id)
     LocalStorage.set('user-det', this.state)
   },
   clear(){

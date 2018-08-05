@@ -89,170 +89,71 @@
 </template>
 
 <script>
-import store from './product-store'
-import userStore from './user-store'
-import keyStore from './key-store'
+import seedStore from '../stores/seed-store.js'
 import { Toast,Loading,Dialog } from 'quasar'
+import hypersign_wallet from '../utils/hypersign-wallet'
 import Router from 'router'
-    // var web3 = new Web3();
-    var global_keystore;
-    function gotNoFileEntry(e) {
-        console.log(e);
-        Router.replace({ path: 'help' })
-        // Dialog.create({
-        //     title: 'Confirm',
-        //     message: 'Select option to progress..',
-        //     buttons: [
-        //       {
-        //         label: 'Continue',
-        //         handler () {
-        //           Router.replace({ path: 'help' })
-        //         }
-        //       }
-        //     ]
-        // })
-    }
-    function addUserDet(public_key, form_data) {
-      let id = Math.random().toString(36).substr(2, 9)
-      userStore.set(id, {public_key,form_data})
-      Toast.create.positive('Successfully registered!')
-    }
-    function addKeyStore(key){
-      let id = Math.random().toString(36).substr(2, 9)
-      keyStore.set(id,{key});
-    }
-    function onFileSystemSuccess(fileSystem) {
-        fileSystem.getDirectory('batch', {
-            create: false,
-            exclusive: false
-        }, onGetDirectorySuccess, onGetDirectoryFail);
-    }
-    function onGetDirectorySuccess(dir,directury) {
-        dir.getFile('product.json', {
-            create: false,
-            exclusive: false
-        }, gotFileEntry, gotNoFileEntry);
-    }
-    function gotFileEntry(dir){
-      Dialog.create({
-          title: 'Confirm',
-          message: 'Select option to progress..',
-          buttons: [
-            {
-              label: 'Synch',
-              handler () {
-                Router.replace({ path: 'sync' })
-              }
-            },
-            {
-              label: 'Continue',
-              handler () {
-                Router.replace({ path: 'stockin' })
-              }
-            }
-          ]
-      })
-    }
-    function onGetDirectoryFail(err)
-    {
-      console.log('Direcotory Error :'+err);
-    }
+import userStore from '../stores/user-store.js'
+import keyStore from '../stores/key-store.js'
+
+function addUserDet(public_key, form_data) {
+   debugger
+   let id = Math.random().toString(36).substr(2, 9)
+    userStore.set(id, {public_key,form_data})
+//    Toast.create.positive('Successfully registered!')
+}
+
+function addKeyStore(key){
+  let id = Math.random().toString(36).substr(2, 9)
+  keyStore.set(id,{key});
+}
+
+function addSeedStore(seed){
+  //debugger
+  let id = Math.random().toString(36).substr(2, 9)
+  seedStore.set(id, {seed});
+}
+
 export default {
   mounted(){
-      console.log('Componenet Mounted');
-      // this.userStore.clear()
-      // const url = appconfig.dev.BASE_URL+'/api/product_check_in/';
-      // this.checkFile();
+    console.log('Componenet Mounted');
   },
   data () {
     return {
-        itemsInStock:store.state,
+        //itemsInStock:store.state,
         form:{username:'',password:'',email:''}
     }
   },
-  computed: {
-    // hasITEMS () {
-    //    if(this.itemsInStock.length<0)
-    //    {
-    //       this.getProductSku();
-    //    }
-    //    else{
-    //       console.log('itemsInStock available')
-    //    }
-    // }
-  },
   methods: {
     generate () {
-    
-      var form = this.form;
-    debugger
-    var randomSeed = lightwallet.keystore.generateRandomSeed();
-    //give  this randomSeed  to the user to save
-    console.log('Random Seed = ' +  randomSeed)
-    var password = form.password
-    lightwallet.keystore.createVault({
-        password: password,
-        seedPhrase: randomSeed,
-        //random salt 
-        hdPathString: "m/0'/0'/0'"
-      }, (err, ks) => {
-        debugger
-        global_keystore = ks
+      Loading.show({delay : 300})
+      let gen_promise = hypersign_wallet.generate(this.form.password)
+      gen_promise.then((res)=>{
+        //debugger
+        console.log('Promise resolved.');
+        // storing seed to local storage
+        addSeedStore(res)
+        // calling new address promise
+        let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)
         
-        //addKeyStore(global_keystore)
-        window.key_Store = ks
-        this.newAddresses(password);
-        //setWeb3Provider(global_keystore);
-        //getBalances();
-    })
+        newaddr_promise.then((res)=> {
+          //debugger
+          console.log('Promise resolved.');
+          let addresses = res
+          for (var i=0; i<addresses.length; ++i) {
+              addUserDet(addresses[i],this.form)     
+              Loading.hide()
+              Toast.create.positive('Successfully registered!')
+              Router.replace({ path: '/' })
+          }
+        }, (err)=> {
+          console.log('Promise rejected. Err = ' + err);  
+        })
+      }, (err) => {
+        console.log('Promise rejected. Err = ' + err);  
+      })
     },
-  newAddresses (password) {
-        debugger
-        if (password == '') {
-          password = prompt('Enter password to retrieve addresses', 'Password');
-        }
-        var numAddr = parseInt(1) //provide number of accounts you want to create
-        global_keystore.keyFromPassword(password, (err, pwDerivedKey) => {
-            debugger
-            window.pwDerivedKey = pwDerivedKey  
-            global_keystore.generateNewAddress(pwDerivedKey, numAddr);
-            var addresses = global_keystore.getAddresses()
-            for (var i=0; i<addresses.length; ++i) {
-              addUserDet(addresses[i],this.form)
-              Router.replace({ path: 'wallet' })
-              //console.log('Address = ' + addresses[i])
-            }
-            //getBalances();
-         })
-      },
-  
-    testMethod () {
-        console.log('console.log(cordova): %O', cordova)
-    },
-    getProductSku() {
-      Loading.show();
-      const url = appconfig.dev.BASE_URL+`/get_shankar_products/`;
-       axios.get(url).then(response => {
-        response.data.forEach(function(item){
-            addProduct(item._sku,item._barcode,item.movement,item.id,item.updated_at,item.created_at)
-        });
-        Loading.hide()
-        Toast.create.positive('Product added')
-        // console.log(store);
-      });
-    },
-    checkFile(){
-       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
-            console.log('got main dir',dir);
-            try{
-                onFileSystemSuccess(dir,'fileName');
-            }
-            catch(err){
-              console.log(err);
-            }
-            
-        });
-    },
+
     login(){
       Router.replace({ path: '/' })
     },

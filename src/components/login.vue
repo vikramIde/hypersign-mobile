@@ -15,8 +15,8 @@
               <form action="#">
                 <div style="positive:relative;width:100%;">
                     <div class="floating-label">
-                      <input type="password" maxlength="4" required class="full-width login_pass" style="color:#fff;">
-                      <label style="color:#fff;">Enter your 4 digit password here</label>
+                      <input type="password"  required class="full-width login_pass" style="color:#fff;" v-model = "form.password">
+                      <label style="color:#fff;">Enter your password here</label>
                     </div>
                     <div class="full-width" style="margin-top:30px;positive:absolute;bottom:0;">
                       <button class="light large full-width" @click = "login()">
@@ -46,21 +46,61 @@
 // import store from './product-store'
 // import { Toast,Loading,Dialog } from 'quasar'
 import Router from 'router'
+import hypersign_wallet from '../utils/hypersign-wallet'
+import userStore from '../stores/user-store'
+import seedStore from '../stores/seed-store'
+import { Toast,Loading,Dialog } from 'quasar'
+
+
+function addUserDet(public_key, form_data) {
+  //  let id = Math.random().toString(36).substr(2, 9)
+    userStore.set({public_key,form_data})
+//    Toast.create.positive('Successfully registered!')
+}
 export default {
-  mounted(){
+  mounted(){  
+    console.log(this.seed)
   },
   data () {
     return {
-        
+      seedStore : seedStore.state,
+      form: {password : ''}
     }
   },
   methods:{
-    login(){
-      Router.replace({ path: 'home' })
+    login(){      
+      if(this.form && this.seedStore && this.form.password && this.seedStore.seed) {
+        Loading.show({delay : 300})
+        let seed_promise = hypersign_wallet.setSeed(this.form.password, this.seedStore.seed)
+        seed_promise.then((res)=> {
+          console.log('Promise resolved.');
+          let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)
+          newaddr_promise.then((res)=> {
+            console.log('Promise resolved.');
+            let addresses = res
+            for (var i=0; i<addresses.length; ++i) {
+                addUserDet(addresses[i],this.form.password)     
+                Loading.hide()
+                Router.replace({ path: 'wallet' })
+            }
+          }, (err)=>{
+            console.log('Promise rejected. Err = ' + err);
+            Toast.create.negative('Error =' + err)  
+          })
+        }, (err)=>{
+          console.log('Promise rejected. Err = ' + err)
+          Toast.create.negative('Error =' + err)  
+        })      
+      }else{
+        let msg = "Password or seed is blank!"
+        console.log(msg);  
+        Toast.create.negative('Error =' + msg)  
+      }
     },
     register(){
       Router.replace({ path: 'register' })
-    }
+    },
+    
   }
   
 }

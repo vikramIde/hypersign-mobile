@@ -67,8 +67,7 @@
 <script>
 import { Dialog, Toast } from 'quasar'
 import store from './product-store'
-import userStore from './user-store'
-// import keyStore from './key-store'
+import userStore from '../stores/user-store'
 
 function addProduct (name,code,direction='in',timeStamp) {
   let id = Math.random().toString(36).substr(2, 9)
