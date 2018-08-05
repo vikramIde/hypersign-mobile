@@ -19,18 +19,18 @@ export default new VueRouter({
    * If switching back to default "hash" mode, don't forget to set the
    * build publicPath back to '' so Cordova builds work again.
    */
-
   routes: [
     // { path: '/', component: load('Index') }, // Default
     { path: '*', component: load('Error404') } ,// Not found
-    { path: '/', component: load('Home') }, // Default
+    { path: '/', component: load('login') }, // Default
     { path: '/home', component: load('Index') }, // Default
-    { path: '/wallet', component: load('Wallet') }, // wallet
-    { path: '/signtx', component: load('sign-tx') }, // Default
+    { path: '/register', component: load('register') }, // Default
     { path: '/stockin', component: load('stockin') }, // Default
     { path: '/stockout', component: load('stockout') }, // Default
     { path: '/help', component: load('help') },
     { path: '/sync', component: load('sync') }, // Default
+    { path: '/wallet', component: load('Wallet') },
+    { path: '/signtx', component: load('sign-tx') }
   ]
 })
 

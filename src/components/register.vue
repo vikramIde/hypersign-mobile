@@ -1,16 +1,60 @@
 <template>
-  <div class="error-page window-height window-width bg-light column items-center">
+  <div>
+    <q-layout>
+  <div class="error-page window-height window-width column items-center custom_login">  
+    <div class="items-center justify-center" style="height:100%;width:100%;padding:50px; background-image:url('statics/log_bg.png');background-color: #027be3 !important;background-size:cover;" >
+      <div class="content_main" style="position:absolute; top:20%;left:40px;right:40px;">
+        <div class="row">
+          <div class="width-1of1" style="text-align:center;margin-bottom: 20px;">
+            <img src="../assets/hyper-logo-white.png" alt="" style="width:40%;">
+            <div style="clear:both;"></div>
+          </div>
+        </div>
+        <div style="clear:both;"></div>
+        <div class="row">
+          <div class="width-1of1" >
+              <form action="#">
+                <div style="positive:relative;width:100%;">
+                    <div class="floating-label">
+                      <input type="text" required class="full-width login_pass" style="color:#fff;" v-model="form.username">
+                      <label style="color:#fff;">Name</label>
+                    </div>
+                    <div class="floating-label">
+                      <input type="text" required class="full-width login_pass" style="color:#fff;"  v-model="form.email">
+                      <label style="color:#fff;">E-mail</label>
+                    </div>
+                    <div class="floating-label">
+                      <input type="password" required class="full-width login_pass" style="color:#fff;" v-model="form.password">
+                      <label style="color:#fff;">Password</label>
+                    </div>
+                    <div class="full-width" style="margin-top:30px;positive:absolute;bottom:0;">
+                      <button class="light large full-width" @click = "generate()">
+                        Register
+                      </button>
+                    </div>
+                    <div class="full-width" style="margin-top:10px;positive:absolute;bottom:0; color:#ddd;" >
+                      <p>OR <a href="javascript:void(0)" @click="login()" style="color:#fff;text-decoration:underline;">LOGIN</a> </p>
+                    </div>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+    </div>
+  </div>
+  </q-layout>
+    <!-- <div class="error-page window-height window-width bg-light column items-center">
     <div class="error-code bg-primary flex items-center justify-center">
       Nano Corp
     </div>
     <div>
       <div class="error-card card bg-white column items-center justify-center">
-        <!-- <i class="text-grey-5">error_outline</i> -->
         <p class="caption text-center">Register Screen...</p>
         <p class="">
           <div class="list">
             <div class="item two-lines">
-             <!-- <i class="item-primary">edit</i>-->
               <div class="item-content">
                 <input class="full-width" v-model="form.username" placeholder="Type Username">
               </div>
@@ -28,21 +72,20 @@
               </div>
             </div>
           </div>
-          
-          <!-- Regular shaped -->
           <button class="primary" @click="generate()">
             Register
           </button>
           <router-link to="/help" v-if="batch==true">
             <button class="grey push small">
               Go home
-              <!-- <i class="on-right">Enter</i> -->
             </button>
           </router-link>
         </p>
       </div>
     </div>
+  </div> -->
   </div>
+  
 </template>
 
 <script>
@@ -69,36 +112,28 @@ import Router from 'router'
         //     ]
         // })
     }
-
     function addUserDet(public_key, form_data) {
       let id = Math.random().toString(36).substr(2, 9)
-
       userStore.set(id, {public_key,form_data})
       Toast.create.positive('Successfully registered!')
     }
-
     function addKeyStore(key){
       let id = Math.random().toString(36).substr(2, 9)
       keyStore.set(id,{key});
     }
-
     function onFileSystemSuccess(fileSystem) {
-
         fileSystem.getDirectory('batch', {
             create: false,
             exclusive: false
         }, onGetDirectorySuccess, onGetDirectoryFail);
     }
-
     function onGetDirectorySuccess(dir,directury) {
         dir.getFile('product.json', {
             create: false,
             exclusive: false
         }, gotFileEntry, gotNoFileEntry);
     }
-
     function gotFileEntry(dir){
-
       Dialog.create({
           title: 'Confirm',
           message: 'Select option to progress..',
@@ -117,20 +152,17 @@ import Router from 'router'
             }
           ]
       })
-
     }
-
     function onGetDirectoryFail(err)
     {
       console.log('Direcotory Error :'+err);
     }
-
 export default {
   mounted(){
       console.log('Componenet Mounted');
-      this.userStore.clear()
-      const url = appconfig.dev.BASE_URL+'/api/product_check_in/';
-      this.checkFile();
+      // this.userStore.clear()
+      // const url = appconfig.dev.BASE_URL+'/api/product_check_in/';
+      // this.checkFile();
   },
   data () {
     return {
@@ -150,9 +182,9 @@ export default {
     // }
   },
   methods: {
-	generate () {
+    generate () {
     
-	  var form = this.form;
+      var form = this.form;
     debugger
     var randomSeed = lightwallet.keystore.generateRandomSeed();
     //give  this randomSeed  to the user to save
@@ -170,32 +202,26 @@ export default {
         //addKeyStore(global_keystore)
         window.key_Store = ks
         this.newAddresses(password);
-
         //setWeb3Provider(global_keystore);
         //getBalances();
     })
-	},
-
+    },
   newAddresses (password) {
         debugger
         if (password == '') {
           password = prompt('Enter password to retrieve addresses', 'Password');
         }
-
         var numAddr = parseInt(1) //provide number of accounts you want to create
-
         global_keystore.keyFromPassword(password, (err, pwDerivedKey) => {
             debugger
             window.pwDerivedKey = pwDerivedKey  
             global_keystore.generateNewAddress(pwDerivedKey, numAddr);
-
             var addresses = global_keystore.getAddresses()
             for (var i=0; i<addresses.length; ++i) {
               addUserDet(addresses[i],this.form)
               Router.replace({ path: 'wallet' })
               //console.log('Address = ' + addresses[i])
             }
-
             //getBalances();
          })
       },
@@ -208,9 +234,7 @@ export default {
       const url = appconfig.dev.BASE_URL+`/get_shankar_products/`;
        axios.get(url).then(response => {
         response.data.forEach(function(item){
-
             addProduct(item._sku,item._barcode,item.movement,item.id,item.updated_at,item.created_at)
-
         });
         Loading.hide()
         Toast.create.positive('Product added')
@@ -228,6 +252,12 @@ export default {
             }
             
         });
+    },
+    login(){
+      Router.replace({ path: '/' })
+    },
+    register(){
+      Router.replace({ path: 'register' })
     }
   }
 }

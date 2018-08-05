@@ -2,15 +2,15 @@
   <div>
   <div slot="header" class="toolbar">
     <q-toolbar-title :padding="1">
-      Scan Stock (beta)
+      Hypersign(beta)
     </q-toolbar-title>
   </div>
   <!-- Navigation Tabs -->
   <q-tabs slot="navigation">
-    <q-tab icon="alarm" route="/stockin" exact replace>In</q-tab>
-    <q-tab icon="alarm" route="/stockout" exact replace>Out</q-tab>
-    <q-tab icon="help" route="/help" exact replace>help</q-tab>
-    <q-tab icon="help" route="/sync" exact replace>sync</q-tab>
+    <q-tab icon="alarm" route="/wallet" exact replace>Wallet</q-tab>
+    <q-tab icon="alarm" route="/signtx" exact replace>Scan QR</q-tab>
+    <!-- <q-tab icon="help" route="/help" exact replace>Profile</q-tab>
+    <q-tab icon="help" route="/sync" exact replace>sync</q-tab> -->
   </q-tabs>
 
   <div class="layout-padding">
@@ -53,7 +53,7 @@
   </div>
 </div>
 </div>
-<q-fab class=" absolute-bottom-right" classNames="primary" direction="up">
+<q-fab class="absolute-bottom-right cust-fab" classNames="primary" direction="up">
   <q-small-fab class="absolute-bottom-right" @click.native="triggerSignTx()" icon="phonelink_ring"></q-small-fab>
 </q-fab>
 <!-- Footer -->
@@ -116,7 +116,6 @@ export default {
     // console.log(appconfig);
   },
   data(){
-
     return {
       urls:false,
       itemsInStock:store.state,
@@ -159,136 +158,30 @@ export default {
             prompt : "Place a barcode inside the scan area", // Android
             resultDisplayDuration: 500
         }
-     );
+      );
     },
     triggerSignTx () {
       debugger
       if (lightwallet) {
         let from  = key_Store.addresses[0]
-       
-
-let message  = "Text to sign"
-///Signing .......
-         let signedMsg = lightwallet.signing.signMsg(key_Store, pwDerivedKey, message, from )
-         console.log(signedMsg)
-
-          if(signedMsg){
-
-            ///Verifying.......
-            let generatedPublicKeyBytes = lightwallet.signing.recoverAddress(message, signedMsg.v, signedMsg.r, signedMsg.s)
-              let generatedPublicKey = this.toHexString(generatedPublicKeyBytes)
-              if (generatedPublicKey === from ){
-                console.log("Validation Successfull!")
-
-              }
-
+        let message  = "Text to sign"
+        ///Signing .......
+        let signedMsg = lightwallet.signing.signMsg(key_Store, pwDerivedKey, message, from )
+        console.log(signedMsg)
+        if(signedMsg){
+          ///Verifying.......
+          let generatedPublicKeyBytes = lightwallet.signing.recoverAddress(message, signedMsg.v, signedMsg.r, signedMsg.s)
+          let generatedPublicKey = this.toHexString(generatedPublicKeyBytes)
+          if (generatedPublicKey === from ){
+            console.log("Validation Successfull!")
           }
-          
+        }
       }
-
     },
-
-     toHexString(byteArray) {
-  return Array.prototype.map.call(byteArray, function(byte) {
-    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-  }).join('');
-},
-    checkFile(){
-      let scope = this;
-       window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dir) {
-
-            // console.log('got main dir',dir);
-
-            try{
-                dir.getDirectory('batch', {
-                      create: false,
-                      exclusive: false
-                  }, function(dir){
-                    dir.getFile('product.json', {
-                        create: true,
-                        exclusive: false
-                    }, function(dir){
-                        // console.log(scope.itemsInStock);
-                        writeFile(dir,scope.itemsInStock);
-
-                    }, gotNoFileEntry);
-
-                  }, onGetDirectoryFail);
-
-            }
-            catch(err){
-              console.log(err);
-            }
-            
-        });
-    },
-    testMethod () {
-        console.log(this.itemsInStock);
-    },
-    editProduct (id) {
-      var item = store.state[id]
-      var that = this;
-      Dialog.create({
-        title: 'Edit Product',
-        message: '',
-        form: {
-          name: {
-            type: 'textbox',
-            label: 'Name',
-            model: item.name
-          },
-          id: {
-            type: 'textbox',
-            label: 'id',
-            model: item.code
-          }
-        },
-        buttons: [
-          'Cancel',
-          {
-            label: 'Save',
-            preventClose: true,
-            handler (data, close) {
-              // console.log(data);
-              if (!data.name.length) {
-                Toast.create.warning('Please fill in a name')
-                return
-              }
-              if (!data.id.length) {
-                Toast.create.warning('Please fill in a id')
-                return
-              }
-
-              close()
-              store.set(id, {
-                SKU: data.name,
-                barcode: data.id,
-                movement
-              })
-            }
-          }
-        ]
-      })
-    },
-    deleteProduct (id) {
-      var that = this;
-      Dialog.create({
-        title: 'Confirm',
-        message: `
-          Are you sure you want to delete the following entry?<br><br>
-          <strong>${this.itemsInStock[id].name}</strong> - <em>${this.itemsInStock[id].code}</em>
-        `,
-        buttons: [
-          'Cancel',
-          {
-            label: 'Delete',
-            handler () {
-              store.del(id)
-              Toast.create.positive('Product removed')
-            }
-          }
-        ]
-      })
+    toHexString(byteArray) {
+      return Array.prototype.map.call(byteArray, function(byte) {
+        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+      }).join('');
     }
   },
   computed: {
@@ -302,6 +195,12 @@ let message  = "Text to sign"
 </script>
 
 <style lang="stylus">
+.cust-fab
+  bottom 60px
+.toolbar
+  position fixed
+  bottom 0
+  z-index 9999
 .logo-container
   width 192px
   height 268px
