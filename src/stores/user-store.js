@@ -4,7 +4,6 @@ import { LocalStorage } from 'quasar'
 export default {
   state: LocalStorage.get.item('user-det') || {},
   set (id,item) {
-    debugger
     // Vue.set(this.state,id, item)
     LocalStorage.set('user-det', item)
   },

@@ -17,15 +17,16 @@
   <!-- <router-view class="layout-view"></router-view> -->
   <!-- OR ELSE, IF NOT USING subRoutes: -->
   <div class="layout-padding">
-      <blockquote v-for="(item, id) in userDetails" :key = "id">
+      
+      <blockquote >
           <b>Account : </b> 
           <small>
-            {{ item.public_key }}
+            {{  this.userDetails.public_key }}
           </small>
 
           <b>User Name : </b> 
           <small>
-            {{ item.form_data.username }}
+            {{ this.userDetails.form_data && this.userDetails.form_data.username }}
           </small>
 
       </blockquote>
@@ -42,7 +43,7 @@
 
 <script>
 import store from './product-store'
-import userStore from '../stores/user-store'
+import userStore from '../stores/user-store.js'
 import { Toast,Loading,Dialog } from 'quasar'
 import Router from 'router'
     
@@ -58,7 +59,7 @@ export default {
   mounted(){
     debugger
     console.log('Componenet Mounted')
-    console.log(userStore.state)
+    console.log(this.userDetails)
     
   },
   data () {

@@ -97,7 +97,7 @@ import userStore from '../stores/user-store.js'
 import keyStore from '../stores/key-store.js'
 
 function addUserDet(public_key, form_data) {
-   debugger
+  //  debugger
    let id = Math.random().toString(36).substr(2, 9)
     userStore.set(id, {public_key,form_data})
 //    Toast.create.positive('Successfully registered!')

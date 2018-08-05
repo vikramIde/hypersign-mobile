@@ -4,7 +4,7 @@ import { LocalStorage } from 'quasar'
 export default {
   state: LocalStorage.get.item('seed-store') || {},
   set (id,item) {
-    Vue.set(this.state, id, item)
+    // Vue.set(this.state, id, item)
     LocalStorage.set('seed-store', item)
   },
   del () {

@@ -53,8 +53,8 @@ import { Toast,Loading,Dialog } from 'quasar'
 
 
 function addUserDet(public_key, form_data) {
-  //  let id = Math.random().toString(36).substr(2, 9)
-    userStore.set({public_key,form_data})
+   let id = Math.random().toString(36).substr(2, 9)
+    userStore.set(id, {public_key,form_data})
 //    Toast.create.positive('Successfully registered!')
 }
 export default {
@@ -64,6 +64,7 @@ export default {
   data () {
     return {
       seedStore : seedStore.state,
+      
       form: {password : ''}
     }
   },
@@ -79,7 +80,7 @@ export default {
             console.log('Promise resolved.');
             let addresses = res
             for (var i=0; i<addresses.length; ++i) {
-                addUserDet(addresses[i],this.form.password)     
+                addUserDet(addresses[i],this.form)     
                 Loading.hide()
                 Router.replace({ path: 'wallet' })
             }
