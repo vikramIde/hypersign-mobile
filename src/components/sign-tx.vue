@@ -54,7 +54,7 @@
 </div>
 </div>
 <q-fab class="absolute-bottom-right cust-fab" classNames="primary" direction="up">
-  <q-small-fab class="absolute-bottom-right" @click.native="triggerSignTx()" icon="phonelink_ring"></q-small-fab>
+  <q-small-fab class="absolute-bottom-right" @click.native="signTransaction()" icon="phonelink_ring"></q-small-fab>
 </q-fab>
 <!-- Footer -->
 <div slot="footer" class="toolbar">
@@ -65,50 +65,10 @@
 </template>
 
 <script>
-import { Dialog, Toast } from 'quasar'
+import { Dialog, Toast, Loading } from 'quasar'
 import store from './product-store'
 import userStore from '../stores/user-store'
-
-function addProduct (name,code,direction='in',timeStamp) {
-  let id = Math.random().toString(36).substr(2, 9)
-
-  store.set(id, {name,code,direction,timeStamp})
-  Toast.create.positive('Product added')
-}
-  
-function onGetDirectoryFail()
-{
-  alert('Folder batch Doesnot Exist');
-}
-
-function gotNoFileEntry()
-{
-  alert('Product.json Does not exist');
-}
-
-function writeFile(fileEntry,dataObj) {
-    // Create a FileWriter object for our FileEntry (log.txt).
-    fileEntry.createWriter(function (fileWriter) {
-
-        fileWriter.onwriteend = function() {
-            console.log("Successful file write...");
-            // readFile(fileEntry);
-        };
-
-        fileWriter.onerror = function (e) {
-            console.log("Failed file write: " + e.toString());
-        };
-
-        // If data object is not passed in,
-        // create a new Blob instead.
-        if (!dataObj) {
-            dataObj = new Blob(['some file data'], { type: 'text/plain' });
-        }
-
-        fileWriter.write(JSON.stringify(dataObj));
-
-    });
-}
+import hsWallet from '../utils/hypersign-wallet'
 
 export default {
   mounted(){
@@ -129,22 +89,14 @@ export default {
   },
   methods:{
     scanQR () {
+      debugger
       let  that = this;
       cordova.plugins.barcodeScanner.scan( 
-        function (result) {
-            // console.log('inside result')
-            if(result.text !='')
-            {
-                // console.log('inside result chein')
-                var d = new Date();
-                var e = formatDate(d);
-
-                addProduct("randomName",result.text,'In',e);
-                that.checkFile();
-
-                this.triggerSignTx()
-            }
-            
+        function (result) {          
+          if(result.text !='')
+          {   
+            signTransaction("Test Raaw Message")
+          }
         },
         function (error) {
             alert("Scanning failed: " + error);
@@ -157,30 +109,32 @@ export default {
             prompt : "Place a barcode inside the scan area", // Android
             resultDisplayDuration: 500
         }
-      );
+      )
     },
-    triggerSignTx () {
-      debugger
-      if (lightwallet) {
-        let from  = key_Store.addresses[0]
-        let message  = "Text to sign"
-        ///Signing .......
-        let signedMsg = lightwallet.signing.signMsg(key_Store, pwDerivedKey, message, from )
-        console.log(signedMsg)
-        if(signedMsg){
-          ///Verifying.......
-          let generatedPublicKeyBytes = lightwallet.signing.recoverAddress(message, signedMsg.v, signedMsg.r, signedMsg.s)
-          let generatedPublicKey = this.toHexString(generatedPublicKeyBytes)
-          if (generatedPublicKey === from ){
-            console.log("Validation Successfull!")
-          }
-        }
+    signTransaction(rawMsg){
+      rawMsg = "Message after QR scan"
+      let from = this.userDetails.public_key
+      if(from && rawMsg){
+        Loading.show()
+        let signingPromise = hsWallet.signMessageTx(from,rawMsg)
+        signingPromise.then((res) => {
+          let signedMsgRSV = res
+          let verifyPromise = hsWallet.verifyMessageTx(rawMsg, signedMsgRSV, from)
+          verifyPromise.then((res) =>{
+            Loading.hide()
+            if(res) Toast.create.positive('Message successfully signed.')
+          } , (err) => {
+            if(!err) Toast.create.negative('Error : Promise rejected in verify.')
+            Loading.hide()
+          })
+        }, (err) => {
+          Toast.create.negative('Error : ' + err)
+          Loading.hide()
+        })
+      }else{
+        console.log('Error : from or rawMsg is empty.')
+        Toast.create.negative('Error : from or rawMsg is empty.')
       }
-    },
-    toHexString(byteArray) {
-      return Array.prototype.map.call(byteArray, function(byte) {
-        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-      }).join('');
     }
   },
   computed: {

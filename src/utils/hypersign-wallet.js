@@ -62,30 +62,38 @@ var hypersign_wallet = {
                     else {
                         window.key_Store = ks
                         resolve()
-                    }
+                    }   
             })
         })
     },
-    addUserDet(public_key, form_data) {
-        let id = Math.random().toString(36).substr(2, 9)
-        userStore.set({public_key,form_data})
-        debugger
-        // if(userStore.state && userStore.state.length > 0){
-      
-        // }else {
-        //   let id = Math.random().toString(36).substr(2, 9)
-        //   userStore.set(id, {public_key,form_data})
-        // }   
-      },
-      addKeyStore (key){
-        let id = Math.random().toString(36).substr(2, 9)
-        keyStore.set(id,{key});
-      },
-     addSeedStore(seed){
-        let id = Math.random().toString(36).substr(2, 9)
-        seedStore.set(id,{seed});
-      }
-
+    signMessageTx(from,rawMsg) {
+        return new Promise((resolve, reject) =>{
+            if(window.key_Store){
+                if(window.pwDerivedKey){
+                    let signedMsgRSV = lightwallet.signing.signMsg(window.key_Store, window.pwDerivedKey, rawMsg, from )
+                    if(signedMsgRSV) resolve(signedMsgRSV)
+                    else reject('Error : Error after singMsg call.')
+                }else {
+                    reject('Error : window.pwDerivedKey is null or empty.')        
+                }
+            }else {
+                reject('Error : window.key_Store is null or empty.')    
+            }
+        })
+    },
+    verifyMessageTx(rawMessage, signedMsgRSV, publicKey){
+        return new Promise((resolve, reject) => {
+            let newpublicKeyUint8Arr = lightwallet.signing.recoverAddress(rawMessage, signedMsgRSV.v, signedMsgRSV.r, signedMsgRSV.s)
+            let newpublicKey = this.toHexString(newpublicKeyUint8Arr)
+            if(publicKey === '0x' + newpublicKey)  resolve(true)
+            else reject(false)
+        })
+    },
+    toHexString(byteArray) {
+        return Array.prototype.map.call(byteArray, function(byte) {
+          return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+        }).join('');
+    }
 }
 
 var storeSetter = {
