@@ -58,7 +58,7 @@
 <q-fab class=" absolute-bottom-right" classNames="primary" direction="up">
   <q-small-fab class="absolute-bottom-right" @click.native="scanQR()" icon="phonelink_ring"></q-small-fab>
 </q-fab>
-<div slot="footer" class="toolbar">All right reserved Nano Corporation . </div>
+<div slot="footer" class="toolbar">All right reserved Hypermine Technologiesn . </div>
 
 </div>
 </template>

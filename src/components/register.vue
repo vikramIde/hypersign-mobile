@@ -33,7 +33,7 @@
                       </button>
                     </div>
                     <div class="full-width" style="margin-top:10px;positive:absolute;bottom:0; color:#ddd;" >
-                      <p>OR <a href="javascript:void(0)" @click="login()" style="color:#fff;text-decoration:underline;">LOGIN</a> </p>
+                      <p>OR <button href="javascript:void(0)" @click="login()" style="color:#fff;text-decoration:underline;">LOGIN</button> </p>
                     </div>
                 </div>
               </form>
@@ -45,45 +45,7 @@
     </div>
   </div>
   </q-layout>
-    <!-- <div class="error-page window-height window-width bg-light column items-center">
-    <div class="error-code bg-primary flex items-center justify-center">
-      Nano Corp
-    </div>
-    <div>
-      <div class="error-card card bg-white column items-center justify-center">
-        <p class="caption text-center">Register Screen...</p>
-        <p class="">
-          <div class="list">
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" v-model="form.username" placeholder="Type Username">
-              </div>
-            </div>
-            <hr>
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" type="password" v-model="form.password" placeholder="Type password">
-              </div>
-            </div>
-            <hr>
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" v-model="form.email" placeholder="Type email">
-              </div>
-            </div>
-          </div>
-          <button class="primary" @click="generate()">
-            Register
-          </button>
-          <router-link to="/help" v-if="batch==true">
-            <button class="grey push small">
-              Go home
-            </button>
-          </router-link>
-        </p>
-      </div>
-    </div>
-  </div> -->
+
   </div>
   
 </template>
@@ -97,7 +59,7 @@ import userStore from '../stores/user-store.js'
 import keyStore from '../stores/key-store.js'
 
 function addUserDet(public_key, form_data) {
-  //  debugger
+  //  
    let id = Math.random().toString(36).substr(2, 9)
     userStore.set(id, {public_key,form_data})
 //    Toast.create.positive('Successfully registered!')
@@ -109,7 +71,7 @@ function addKeyStore(key){
 }
 
 function addSeedStore(seed){
-  //debugger
+  //
   let id = Math.random().toString(36).substr(2, 9)
   seedStore.set(id, {seed});
 }
@@ -126,18 +88,23 @@ export default {
   },
   methods: {
     generate () {
-      Loading.show({delay : 300})
-      let gen_promise = hypersign_wallet.generate(this.form.password)
-      gen_promise.then((res)=>{
-        //debugger
+      //loader
+      if(this.form.password !=''&& this.form.username !=''&& this.form.email !='')
+      {
+        Loading.show({delay : 300})
+        debugger
+        let gen_promise = hypersign_wallet.generate(this.form.password)
+        gen_promise.then((res)=>{
+        //
         console.log('Promise resolved.');
         // storing seed to local storage
+        debugger
         addSeedStore(res)
         // calling new address promise
         let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)
-        
+
         newaddr_promise.then((res)=> {
-          //debugger
+          //
           console.log('Promise resolved.');
           let addresses = res
           for (var i=0; i<addresses.length; ++i) {
@@ -149,9 +116,15 @@ export default {
         }, (err)=> {
           console.log('Promise rejected. Err = ' + err);  
         })
-      }, (err) => {
+        }, (err) => {
         console.log('Promise rejected. Err = ' + err);  
-      })
+        })
+      }
+      else
+      {
+        Toast.create.negative('Data is missing!')
+      }
+      
     },
 
     login(){

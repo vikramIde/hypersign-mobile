@@ -19,7 +19,7 @@
 
   <!-- Footer -->
   <div slot="footer" class="toolbar">
-    All right reserved Nano Corporatio 
+    All right reserved Hypermine Technologies 
   </div>
 </q-layout>
 

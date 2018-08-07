@@ -36,7 +36,7 @@
 
   <!-- Footer -->
   <div slot="footer" class="toolbar">
-    All right reserved Nano Corporatio 
+    All right reserved Hypermine Technologies 
   </div>
   </q-layout>
 </template>
@@ -57,7 +57,7 @@ function addUserDet(public_key, user_name) {
 
 export default {
   mounted(){
-    debugger
+    
     console.log('Componenet Mounted')
     console.log(this.userDetails)
     

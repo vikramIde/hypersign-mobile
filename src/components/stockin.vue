@@ -58,7 +58,7 @@
 </q-fab>
 <!-- Footer -->
 <div slot="footer" class="toolbar">
-  All right reserved Nano Corporation .
+  All right reserved Hypermine Technologiesn .
 </div>
 </div>
 
