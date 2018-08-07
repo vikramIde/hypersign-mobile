@@ -92,13 +92,11 @@ export default {
       if(this.form.password !=''&& this.form.username !=''&& this.form.email !='')
       {
         Loading.show({delay : 300})
-        debugger
         let gen_promise = hypersign_wallet.generate(this.form.password)
         gen_promise.then((res)=>{
         //
         console.log('Promise resolved.');
         // storing seed to local storage
-        debugger
         addSeedStore(res)
         // calling new address promise
         let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)

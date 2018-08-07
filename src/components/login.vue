@@ -59,7 +59,7 @@ function addUserDet(public_key, form_data) {
 }
 export default {
   mounted(){  
-    console.log(this.seed)
+    console.log(this.seedStore)
   },
   data () {
     return {
@@ -70,7 +70,7 @@ export default {
   },
   methods:{
     login(){
-        if(this.seedStore.seed && this.seedStore) {
+        if(this.seedStore) {
           if(this.form && this.form.password) {
             Loading.show({delay : 300})
             let seed_promise = hypersign_wallet.setSeed(this.form.password, this.seedStore.seed)

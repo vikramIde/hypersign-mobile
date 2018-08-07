@@ -5,7 +5,6 @@ var hypersign_wallet = {
     generate (password) {
         return new Promise((resolve,reject) => {
             //var form = this.form;
-            debugger
             if (password == '') {
                 reject('Password is empty!')
             }
