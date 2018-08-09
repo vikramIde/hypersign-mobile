@@ -112,6 +112,8 @@ function addSeedStore(seed){
   //debugger
   let id = Math.random().toString(36).substr(2, 9)
   seedStore.set(id, {seed});
+  console.log('After setting seed in store ' + seed)
+
 }
 
 export default {
@@ -132,7 +134,9 @@ export default {
         //debugger
         console.log('Promise resolved.');
         // storing seed to local storage
+        console.log('Before calling addSeedStore() seed : ' + res );
         addSeedStore(res)
+        console.log('After calling addSeedStore().');
         // calling new address promise
         let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)
         
