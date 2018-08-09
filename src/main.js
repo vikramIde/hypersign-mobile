@@ -15,11 +15,9 @@ import appconfig from '../config/appconfig.js'
 import axios from 'axios'
 
 
-window.web3 = require('web3');
-window.hookedWeb3Provider = require("hooked-web3-provider");
-window.lightwallet = require("eth-lightwallet")
+window.web3 = require('web3')
+
 window.appconfig = appconfig;
-window.axios = axios;
 
 
 window.formatDate = function(date) {

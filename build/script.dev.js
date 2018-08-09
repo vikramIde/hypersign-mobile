@@ -80,7 +80,9 @@ module.exports = app.listen(port, function (err) {
   // open browser if set so in /config/index.js
   if (config.dev.openBrowser) {
     devMiddleware.waitUntilValid(function () {
-      opn(uri)
+      opn(uri).catch(err=>{
+        console.log(err)
+      })
     })
   }
 })

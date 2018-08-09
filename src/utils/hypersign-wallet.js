@@ -1,6 +1,6 @@
 import { Toast,Loading,Dialog } from 'quasar'
 import Router from 'router'
-
+import lightwallet from 'eth-lightwallet'
 var hypersign_wallet = {
     generate (password) {
         return new Promise((resolve,reject) => {

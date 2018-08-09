@@ -25,10 +25,6 @@ export default new VueRouter({
     { path: '/', component: load('login') }, // Default
     { path: '/home', component: load('Wallet') }, // Default
     { path: '/register', component: load('register') }, // Default
-    { path: '/stockin', component: load('stockin') }, // Default
-    { path: '/stockout', component: load('stockout') }, // Default
-    { path: '/help', component: load('help') },
-    { path: '/sync', component: load('sync') }, // Default
     { path: '/flash', component: load('flash') }, // Default
     { path: '/wallet', component: load('Wallet') },
     { path: '/signtx', component: load('sign-tx') }
