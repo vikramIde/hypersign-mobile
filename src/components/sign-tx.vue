@@ -58,7 +58,6 @@
         classNames="primary"
         active-icon="alarm"
         direction="up"
-        style="right: 18px; bottom: 18px;"
       >
       <q-small-fab class="secondary" @click.native="scanQrLogin()" icon="phonelink_ring"></q-small-fab>
   <q-small-fab class="purple " @click.native="scanQrTransaction()" icon="payment"></q-small-fab>
@@ -125,7 +124,7 @@ export default {
         function (result) {          
           if(result.text !='')
           {   
-            signTransaction("Test Raaw Message")
+            that.signTransaction("Test Raaw Message")
           }
         },
         function (error) {
@@ -183,7 +182,7 @@ export default {
 .toolbar
   position fixed
   bottom 0
-  z-index 9999
+  
 .logo-container
   width 192px
   height 268px

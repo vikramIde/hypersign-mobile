@@ -26,6 +26,9 @@
                     <div class="full-width" style="margin-top:10px;positive:absolute;bottom:0; color:#ddd;" >
                       <p>OR <a href="javascript:void(0)" @click="register()" style="color:#fff;text-decoration:underline;">REGISTER</a> </p>
                     </div>
+                    <div class="full-width" style="margin-top:10px;positive:absolute;bottom:0; color:#ddd;" >
+                      <p>OR <a href="javascript:void(0)" @click="qrscan()" style="color:#fff;text-decoration:underline;">QrScan</a> </p>
+                    </div>
                 </div>
               </form>
           </div>
@@ -103,6 +106,8 @@ export default {
     },
     register(){
       Router.replace({ path: 'register' })
+    },qrscan(){
+      Router.replace({ path: 'signtx' })
     },
     
   }

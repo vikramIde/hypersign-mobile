@@ -23,7 +23,6 @@
           <small>
             {{ this.userDetails.form_data && this.userDetails.form_data.username }}
           </small>
-
       </blockquote>
       
   </div>
