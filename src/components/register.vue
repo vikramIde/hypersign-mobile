@@ -45,45 +45,6 @@
     </div>
   </div>
   </q-layout>
-    <!-- <div class="error-page window-height window-width bg-light column items-center">
-    <div class="error-code bg-primary flex items-center justify-center">
-      Nano Corp
-    </div>
-    <div>
-      <div class="error-card card bg-white column items-center justify-center">
-        <p class="caption text-center">Register Screen...</p>
-        <p class="">
-          <div class="list">
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" v-model="form.username" placeholder="Type Username">
-              </div>
-            </div>
-            <hr>
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" type="password" v-model="form.password" placeholder="Type password">
-              </div>
-            </div>
-            <hr>
-            <div class="item two-lines">
-              <div class="item-content">
-                <input class="full-width" v-model="form.email" placeholder="Type email">
-              </div>
-            </div>
-          </div>
-          <button class="primary" @click="generate()">
-            Register
-          </button>
-          <router-link to="/help" v-if="batch==true">
-            <button class="grey push small">
-              Go home
-            </button>
-          </router-link>
-        </p>
-      </div>
-    </div>
-  </div> -->
   </div>
   
 </template>

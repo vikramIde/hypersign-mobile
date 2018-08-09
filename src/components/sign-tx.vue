@@ -53,12 +53,19 @@
   </div>
 </div>
 </div>
-<q-fab class="absolute-bottom-right cust-fab" classNames="primary" direction="up">
-  <q-small-fab class="absolute-bottom-right" @click.native="signTransaction()" icon="phonelink_ring"></q-small-fab>
-</q-fab>
+<q-fab
+        class="absolute-bottom-right"
+        classNames="primary"
+        active-icon="alarm"
+        direction="up"
+        style="right: 18px; bottom: 18px;"
+      >
+      <q-small-fab class="secondary" @click.native="scanQrLogin()" icon="phonelink_ring"></q-small-fab>
+  <q-small-fab class="purple " @click.native="scanQrTransaction()" icon="payment"></q-small-fab>
+      </q-fab>
 <!-- Footer -->
 <div slot="footer" class="toolbar">
-  All right reserved Nano Corporation .
+  All right reserved Hypermine Technologies .
 </div>
 </div>
 
@@ -88,7 +95,30 @@ export default {
 
   },
   methods:{
-    scanQR () {
+    scanQrLogin () {
+      debugger
+      let  that = this;
+      cordova.plugins.barcodeScanner.scan( 
+        function (result) {          
+          if(result.text !='')
+          {   
+            that.signTransaction("Test Raaw Message")
+          }
+        },
+        function (error) {
+            alert("Scanning failed: " + error);
+        },
+        {
+            preferFrontCamera : false, // iOS and Android
+            showFlipCameraButton : true, // iOS and Android
+            showTorchButton : true, // iOS and Android
+            torchOn: false, 
+            prompt : "Place a barcode inside the scan area", // Android
+            resultDisplayDuration: 500
+        }
+      )
+    },
+    scanQrTransaction () {
       debugger
       let  that = this;
       cordova.plugins.barcodeScanner.scan( 

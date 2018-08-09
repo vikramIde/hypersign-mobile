@@ -12,7 +12,7 @@
 export default {
 	mounted(){
 		// console.log(cordova);
-		this.manageFolders();
+		// this.manageFolders();
 	},
 	methods:{
 		onErrorDir(err){

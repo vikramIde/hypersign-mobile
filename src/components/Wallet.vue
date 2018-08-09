@@ -8,14 +8,9 @@
   </div>
   <!-- Navigation Tabs -->
   <q-tabs slot="navigation">
-    <q-tab icon="alarm" route="/stockin" exact replace>Wallet</q-tab>
+    <q-tab icon="alarm" route="/wallet" exact replace>Wallet</q-tab>
     <q-tab icon="alarm" route="/signtx" exact replace>Scan QR</q-tab>
-    <!-- <q-tab icon="help" route="/help" exact replace>Profile</q-tab>
-    <q-tab icon="help" route="/sync" exact replace>sync</q-tab> -->
   </q-tabs>
-  <!-- IF USING subRoutes only: -->
-  <!-- <router-view class="layout-view"></router-view> -->
-  <!-- OR ELSE, IF NOT USING subRoutes: -->
   <div class="layout-padding">
       
       <blockquote >
@@ -36,7 +31,7 @@
 
   <!-- Footer -->
   <div slot="footer" class="toolbar">
-    All right reserved Nano Corporatio 
+    All right reserved Hypermine technologies
   </div>
   </q-layout>
 </template>
@@ -57,7 +52,6 @@ function addUserDet(public_key, user_name) {
 
 export default {
   mounted(){
-    debugger
     console.log('Componenet Mounted')
     console.log(this.userDetails)
     

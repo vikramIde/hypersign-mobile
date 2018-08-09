@@ -62,14 +62,13 @@ export default {
   data () {
     return {
       seedStore : seedStore.state,
-      
       form: {password : ''}
     }
   },
   methods:{
     login(){      
       if(this.form && this.form.password) {
-        if(this.seedStore && this.seedStore.seed){
+        if(this.seedStore){
           Loading.show({delay : 300})
           let seed_promise = hypersign_wallet.setSeed(this.form.password, this.seedStore.seed)
           seed_promise.then((res)=> {
