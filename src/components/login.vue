@@ -59,7 +59,7 @@ function addUserDet(public_key, form_data) {
 }
 export default {
   mounted(){  
-    console.log(this.seed)
+    console.log(this.seedStore.seed)
   },
   data () {
     return {
@@ -70,30 +70,36 @@ export default {
   },
   methods:{
     login(){      
-      if(this.form && this.seedStore && this.form.password && this.seedStore.seed) {
-        Loading.show({delay : 300})
-        let seed_promise = hypersign_wallet.setSeed(this.form.password, this.seedStore.seed)
-        seed_promise.then((res)=> {
-          console.log('Promise resolved.');
-          let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)
-          newaddr_promise.then((res)=> {
+      if(this.form && this.form.password) {
+        if(this.seedStore && this.seedStore.seed){
+          Loading.show({delay : 300})
+          let seed_promise = hypersign_wallet.setSeed(this.form.password, this.seedStore.seed)
+          seed_promise.then((res)=> {
             console.log('Promise resolved.');
-            let addresses = res
-            for (var i=0; i<addresses.length; ++i) {
-                addUserDet(addresses[i],this.form)     
-                Loading.hide()
-                Router.replace({ path: 'wallet' })
-            }
+            let newaddr_promise = hypersign_wallet.newAddresses(this.form.password, 1)
+            newaddr_promise.then((res)=> {
+              console.log('Promise resolved.');
+              let addresses = res
+              for (var i=0; i<addresses.length; ++i) {
+                  addUserDet(addresses[i],this.form)     
+                  Loading.hide()
+                  Router.replace({ path: 'wallet' })
+              }
+            }, (err)=>{
+              console.log('Promise rejected. Err = ' + err);
+              Toast.create.negative('Error =' + err)  
+            })
           }, (err)=>{
-            console.log('Promise rejected. Err = ' + err);
+            console.log('Promise rejected. Err = ' + err)
             Toast.create.negative('Error =' + err)  
-          })
-        }, (err)=>{
-          console.log('Promise rejected. Err = ' + err)
-          Toast.create.negative('Error =' + err)  
-        })      
+          })     
+        }else{
+          let msg = "Seed is blank!"
+          console.log(msg);  
+          Toast.create.negative('Error =' + msg)  
+        } 
       }else{
-        let msg = "Password or seed is blank!"
+        let msg = "Password is blank!"
         console.log(msg);  
         Toast.create.negative('Error =' + msg)  
       }

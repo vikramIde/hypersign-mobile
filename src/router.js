@@ -29,7 +29,7 @@ export default new VueRouter({
     { path: '/stockout', component: load('stockout') }, // Default
     { path: '/help', component: load('help') },
     { path: '/sync', component: load('sync') }, // Default
-    { path: '/wallet', component: load('wallet') },
+    { path: '/wallet', component: load('Wallet') },
     { path: '/signtx', component: load('sign-tx') }
   ]
 })
