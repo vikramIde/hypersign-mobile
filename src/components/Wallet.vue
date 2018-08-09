@@ -17,8 +17,15 @@
   <!-- <router-view class="layout-view"></router-view> -->
   <!-- OR ELSE, IF NOT USING subRoutes: -->
   <div class="layout-padding">
-      
-      <blockquote >
+      <div class="card_main">
+        <p style="margin-bottom:0;">
+            <b>sadas</b>
+          </p>
+          <small>
+            {{this.userDetails.public_key }}
+          </small>
+      </div>
+      <!-- <blockquote >
           <b>Account : </b> 
           <small>
             {{  this.userDetails.public_key }}
@@ -29,7 +36,7 @@
             {{ this.userDetails.form_data && this.userDetails.form_data.username }}
           </small>
 
-      </blockquote>
+      </blockquote> -->
       
   </div>
 
@@ -75,6 +82,14 @@ export default {
 </script>
 
 <style lang="stylus">
+.layout-padding
+  width 100%
+.card_main
+  width 100%
+  display block
+  background #f5f5f5
+  padding 20px 15px
+  border-radius 5px
 .error-page
   .error-code
     height 50vh

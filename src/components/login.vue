@@ -1,11 +1,11 @@
 <template>
 <q-layout>
   <div class="error-page window-height window-width column items-center custom_login">  
-    <div class="items-center justify-center" style="height:100%;width:100%;padding:50px; background-image:url('statics/log_bg.png');background-color: #027be3 !important;background-size:cover;" >
+    <div class="items-center justify-center" style="height:100%;width:100%;padding:50px;background-color: #027be3 !important;background-size:cover;" >
       <div class="content_main" style="position:absolute; top:20%;left:40px;right:40px;">
-        <div class="row">
+        <div class="row" style="margin-bottom:40px;">
           <div class="width-1of1" style="text-align:center;margin-bottom: 20px;">
-            <img src="../assets/hyper-logo-white.png" alt="" style="width:40%;">
+            <img src="../assets/hypersign.png" alt="" style="width:60%;">
             <div style="clear:both;"></div>
           </div>
         </div>

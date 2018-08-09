@@ -53,9 +53,22 @@
   </div>
 </div>
 </div>
-<q-fab class="absolute-bottom-right cust-fab" classNames="primary" direction="up">
-  <q-small-fab class="absolute-bottom-right" @click.native="signTransaction()" icon="phonelink_ring"></q-small-fab>
-</q-fab>
+<!-- <q-fab class="absolute-bottom-right cust-fab" classNames="primary" direction="up">
+   <q-small-fab class="absolute-bottom-right" @click.native="signTransaction()" icon="phonelink_ring"></q-small-fab>
+
+</q-fab> -->
+<q-fab
+        class="absolute-bottom-right cust-fab"
+        @click="alert()"
+        classNames="primary"
+        active-icon="alarm"
+        direction="up"
+        style="right: 18px; bottom: 18px;"
+      >
+        <q-small-fab class="purple" @click.native="toast('mail')" icon="mail"></q-small-fab>
+        <q-small-fab class="secondary" @click.native="toast('alarm')" icon="alarm"></q-small-fab>
+      </q-fab>
+
 <!-- Footer -->
 <div slot="footer" class="toolbar">
   All right reserved Nano Corporation .
@@ -149,11 +162,10 @@ export default {
 
 <style lang="stylus">
 .cust-fab
-  bottom 60px
+  bottom 60px !important
 .toolbar
   position fixed
   bottom 0
-  z-index 9999
 .logo-container
   width 192px
   height 268px

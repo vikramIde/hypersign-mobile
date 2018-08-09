@@ -23,13 +23,14 @@ export default new VueRouter({
     // { path: '/', component: load('Index') }, // Default
     { path: '*', component: load('Error404') } ,// Not found
     { path: '/', component: load('login') }, // Default
-    { path: '/home', component: load('wallet') }, // Default
+    { path: '/home', component: load('Wallet') }, // Default
     { path: '/register', component: load('register') }, // Default
     { path: '/stockin', component: load('stockin') }, // Default
     { path: '/stockout', component: load('stockout') }, // Default
     { path: '/help', component: load('help') },
     { path: '/sync', component: load('sync') }, // Default
-    { path: '/wallet', component: load('wallet') },
+    { path: '/flash', component: load('flash') }, // Default
+    { path: '/wallet', component: load('Wallet') },
     { path: '/signtx', component: load('sign-tx') }
   ]
 })
