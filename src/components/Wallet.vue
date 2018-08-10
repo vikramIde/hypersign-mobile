@@ -8,18 +8,26 @@
   </div>
   <!-- Navigation Tabs -->
   <q-tabs slot="navigation">
-    <q-tab icon="alarm" route="/wallet" exact replace>Wallet</q-tab>
-    <q-tab icon="alarm" route="/signtx" exact replace>Scan QR</q-tab>
+    <q-tab icon="account_balance_wallet" route="/wallet" exact replace>Wallet</q-tab>
+    <q-tab icon="line_weight" route="/signtx" exact replace>Scan QR</q-tab>
   </q-tabs>
   <div class="layout-padding">
-      <div class="card_main">
-        <p style="margin-bottom:0;">
-            <b>{{this.userDetails.form_data.username}}</b>
-          </p>
-          <small>
-            {{this.userDetails.public_key }}
-          </small>
-      </div>
+        <div class="row wrap justify-stretch content-center">
+          <div class="card_main">
+            <div class="left-side">
+                <p style="margin-bottom:0;">
+                  <!-- <b>{{this.userDetails.form_data.username}}</b> -->
+                  <b>Name Here</b>
+                </p>
+                <small>
+                  {{this.userDetails.public_key }}
+                </small>
+            </div>
+            <div class="right-side">
+              <i style="font-size:40px;color: #ababab;">keyboard_arrow_right</i>
+            </div>
+          </div>
+        </div>
   </div>
   <!-- Footer -->
   <div slot="footer" class="toolbar">
@@ -61,9 +69,21 @@ export default {
 </script>
 
 <style lang="stylus">
+.left-side
+  float left
+  display inline
+  width 90%
+.right-side
+  float left
+  display flex
+  width 10%
+  align-items center
+  height 100%
 .layout-padding
   width 100%
 .card_main
+  box-shadow 0px 1px 2px #dcdcdc
+  margin-bottom 15px
   width 100%
   display block
   background #f5f5f5
