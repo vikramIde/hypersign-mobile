@@ -56,6 +56,7 @@ import hypersign_wallet from '../utils/hypersign-wallet'
 import Router from 'router'
 import userStore from '../stores/user-store.js'
 import keyStore from '../stores/key-store.js'
+import axios from 'axios'
 
 function addUserDet(public_key, form_data) {
   //  debugger
@@ -84,7 +85,8 @@ export default {
   data () {
     return {
         //itemsInStock:store.state,
-        form:{username:'',password:'',email:''}
+        form:{username:'',password:'',email:''},
+        urlToRegister:'http://localhost:3000/appRegister'
     }
   },
   methods: {
@@ -105,20 +107,57 @@ export default {
           //debugger
           console.log('Promise resolved.');
           let addresses = res
-          for (var i=0; i<addresses.length; ++i) {
-              addUserDet(addresses[i],this.form)     
-              Loading.hide()
-              Toast.create.positive('Successfully registered!')
-              Router.replace({ path: '/' })
-          }
-        }, (err)=> {
+          this.registerApiCall(addresses[0])
+            .then((res)=>{
+                Loading.hide()
+                Toast.create.positive('Successfully registered!')
+                Router.replace({ path: '/' })
+            })
+            .catch((err)=>{
+              console.error(err)
+            })
+        }).catch((err) => {
           console.log('Promise rejected. Err = ' + err);  
         })
-      }, (err) => {
+      })
+      .catch((err) => {
         console.log('Promise rejected. Err = ' + err);  
       })
     },
+    registerApiCall(addresses){
+      return new Promise((resolve,reject) => {
+        try{
+            
+            let data={
+              "data": {
+                "attributes": {
+                  "userName": this.form.username,
+                  "userEmail": this.form.email,
+                  "companyId": 21,
+                  "publicToken": addresses,
+                  "other": "erfghjkl45678"
+                }
+              }
+            }
 
+            axios.post(this.urlToRegister,data)
+            .then(e=> {
+              addUserDet(addresses,this.form)
+              resolve(true)
+            })
+            .catch(e =>{
+              console.error(e)
+              resolve(false)
+            })
+
+            
+        }
+        catch(err){
+          resolve(false)
+        }
+        
+       });
+    },
     login(){
       Router.replace({ path: '/' })
     },
@@ -143,6 +182,5 @@ export default {
     width 90vw
     max-width 600px
     padding 50px
-    i
-      font-size 5rem
+    font-size 5rem
 </style>

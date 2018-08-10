@@ -14,7 +14,7 @@
   </q-tabs>
 
   <div class="layout-padding">
-    <p class="caption">SKU</p>
+    <p class="caption">Tx's</p>
 
     <blockquote v-if="!hasITEMS">
       <small>
@@ -22,54 +22,54 @@
           </small>
     </blockquote>
     <div v-else class="list striped">
-      <div class="item three-lines" v-if="item.direction == 'In' " v-for="(item, id) in itemsInStock">
+      <div class="item three-lines" v-if="item.direction == 'Login' " v-for="(item, id) in txDetails">
 
-        <div class="item-primary bg-primary text-white"><i>assignment</i></div>
+        <div class="item-primary bg-primary text-white"><i>Login Attempt</i></div>
         <div class="item-content has-secondary">
-          <div>{{item.code}}</div>
-          <div>{{item.timeStamp}}</div>
+          <div>{{item.id}}</div>
         </div>
         <div class="item-secondary stamp" style="color:green;font-weight:bold ">
           {{item.direction}}
         </div>
 
         <div class="item-secondary">
-          <i :ref="'target' + id">
-                  more_horiz
-                <q-popover :ref="'popover' + id">
-                  <div class="list">
-                    <div class="item item-link" @click="$refs['popover' + id][0].close(), editProduct(id)">
-                      <i class="item-primary">edit</i>
-          <div class="item-content">Edit</div>
-        </div>
-        <div class="item item-link" @click="$refs['popover' + id][0].close(), deleteProduct(id)">
-          <i class="item-primary">delete</i>
-          <div class="item-content">Delete</div>
+          
         </div>
       </div>
-      </q-popover>
-      </i>
+      -------------------------------------------------------------------------------------
+      <div class="item three-lines" v-if="item.direction == 'Txs' " v-for="(item, id) in txDetails">
+
+        <div class="item-primary bg-primary text-white"><i>Tx- </i></div>
+        <div class="item-content has-secondary">
+          <div>{{item.id}}</div>
+        </div>
+        <div class="item-secondary stamp" style="color:green;font-weight:bold ">
+          {{item.direction}}
+        </div>
+
+        <div class="item-secondary">
+          
+        </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
-<q-fab
-        class="absolute-bottom-right cust-fab"
-        @click="alert()"
-        classNames="primary"
-        active-icon="alarm"
-        direction="up"
-        style="right: 18px; bottom: 18px;"
-      >
-        <q-small-fab class="purple" @click.native="scanQrLogin('mail')" icon="phonelink_ring"></q-small-fab>
-        <q-small-fab class="secondary" @click.native="scanQrTransaction('alarm')" icon="payment"></q-small-fab>
-      </q-fab>
+  <q-fab
+    class="absolute-bottom-right cust-fab"
+    @click="alert()"
+    classNames="primary"
+    active-icon="alarm"
+    direction="up"
+    style="right: 18px; bottom: 18px;"
+  >
+    <q-small-fab class="purple" @click.native="scanQrLogin('mail')" icon="phonelink_ring"></q-small-fab>
+    <q-small-fab class="secondary" @click.native="scanQrTransaction('alarm')" icon="payment"></q-small-fab>
+  </q-fab>
 
 
-<!-- Footer -->
-<div slot="footer" class="toolbar">
-  All right reserved Hypermine Technologies .
-</div>
+  <!-- Footer -->
+  <div slot="footer" class="toolbar">
+    All right reserved Hypermine Technologies .
+  </div>
 </div>
 </template>
 
@@ -78,7 +78,15 @@
 import { Dialog, Toast, Loading } from 'quasar'
 import store from './product-store'
 import userStore from '../stores/user-store'
+import txDetailStore from '../stores/tx-store'
 import hsWallet from '../utils/hypersign-wallet'
+
+function addTxDet(txdetail) {
+  let id = Math.random().toString(36).substr(2, 9)
+
+  txDetailStore.set(id, txdetail)
+  Toast.create.positive('Successfully registered!')
+}
 
 export default {
   mounted(){
@@ -89,11 +97,7 @@ export default {
       urls:false,
       itemsInStock:store.state,
       userDetails:userStore.state,
-      
-      product:{
-        name:'',
-        id:''
-      },
+      txDetails:txDetailStore.state,
     }
 
   },
@@ -105,7 +109,8 @@ export default {
         function (result) {          
           if(result.text !='')
           {   
-            that.signTransaction("Test Raaw Message")
+            that.signTransaction(result.text)
+            addTxDet(result)
           }
         },
         function (error) {
@@ -128,7 +133,8 @@ export default {
         function (result) {          
           if(result.text !='')
           {   
-            that.signTransaction("Test Raaw Message")
+            that.signTransaction(result.text)
+            addTxDet(result)
           }
         },
         function (error) {
@@ -174,7 +180,7 @@ export default {
     hasITEMS () {
       // console.log('After setting :'+this.itemsInStock);
       // alert(store.state);
-      return Object.keys(this.userDetails).length > 0
+      return Object.keys(this.txDetails).length > 0
     }
   }
 }
