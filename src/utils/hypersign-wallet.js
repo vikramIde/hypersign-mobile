@@ -49,7 +49,7 @@ var hypersign_wallet = {
     setSeed(password, seed) {
         return new Promise((resolve, reject) => {
             /// Restoring keystore for login and restore 
-            //debugger
+            // debugger
             if (password == '') {
                 reject('Password is empty!')
             }
@@ -68,8 +68,14 @@ var hypersign_wallet = {
     },
     signMessageTx(from,rawMsg) {
         return new Promise((resolve, reject) =>{
+            // debugger
             if(window.key_Store){
                 if(window.pwDerivedKey){
+                    //code to remove later
+                    if('0x' + window.key_Store.addresses[0] != from) {
+                        from = '0x' + window.key_Store.addresses[0]
+                    }
+                    //code to remove later
                     let signedMsgRSV = lightwallet.signing.signMsg(window.key_Store, window.pwDerivedKey, rawMsg, from )
                     if(signedMsgRSV) resolve(signedMsgRSV)
                     else reject('Error : Error after singMsg call.')

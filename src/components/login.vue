@@ -49,6 +49,7 @@ import hypersign_wallet from '../utils/hypersign-wallet'
 import userStore from '../stores/user-store'
 import seedStore from '../stores/seed-store'
 import { Toast,Loading,Dialog } from 'quasar'
+import axios from 'axios'
 function addUserDet(public_key, form_data) {
    let id = Math.random().toString(36).substr(2, 9)
     userStore.set(id, {public_key,form_data})

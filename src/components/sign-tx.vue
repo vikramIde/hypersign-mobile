@@ -80,7 +80,7 @@ import store from './product-store'
 import userStore from '../stores/user-store'
 import txDetailStore from '../stores/tx-store'
 import hsWallet from '../utils/hypersign-wallet'
-
+import axios from 'axios'
 function addTxDet(txdetail) {
   let id = Math.random().toString(36).substr(2, 9)
 
@@ -109,9 +109,17 @@ export default {
       cordova.plugins.barcodeScanner.scan( 
         function (result) {          
           if(result.text !='')
-          {   
-            that.signTransaction(result.text)
-            addTxDet(result)
+          { 
+            try{
+                Toast.create.negative('Error : ' + result.text)
+                let qrData = JSON.parse(result.text);
+                that.signTransaction(qrData)
+                //addTxDet(qrData)
+            }
+            catch(err){
+              Toast.create.negative('Error : ' + err)
+            }
+            
           }
         },
         function (error) {
@@ -128,14 +136,13 @@ export default {
       )
     },
     scanQrTransaction () {
-      debugger
       let  that = this;
       cordova.plugins.barcodeScanner.scan( 
         function (result) {          
           if(result.text !='')
           {   
             that.signTransaction(result.text)
-            addTxDet(result)
+            // addTxDet(result.text)
           }
         },
         function (error) {
@@ -152,15 +159,17 @@ export default {
       )
     },
     signTransaction(rawMsg){
-      rawMsg = "Message after QR scan"
+      // debugger
+       rawMsg = {"message":"Hello"}
+      let rawMsgDup = JSON.stringify(rawMsg)
       let from = this.userDetails.public_key
       if(from && rawMsg){
         Loading.show()
-        let signingPromise = hsWallet.signMessageTx(from,rawMsg)
+        let signingPromise = hsWallet.signMessageTx(from,rawMsgDup)
         signingPromise.then((res) => {
           let signedMsgRSV = res
-          let verifyPromise = hsWallet.verifyMessageTx(rawMsg, signedMsgRSV, from)
-          verifyPromise.then((res) =>{
+          this.verifyMessageApiCall(rawMsgDup, signedMsgRSV, from)
+          .then((res) =>{
             Loading.hide()
             if(res) Toast.create.positive('Message successfully signed.')
           } , (err) => {
@@ -171,10 +180,48 @@ export default {
           Toast.create.negative('Error : ' + err)
           Loading.hide()
         })
+        .catch((err) => {
+          Toast.create.negative('Error : in catch : Message =  ' + err)
+          Loading.hide()
+        })
       }else{
         console.log('Error : from or rawMsg is empty.')
         Toast.create.negative('Error : from or rawMsg is empty.')
       }
+    },
+    verifyMessageApiCall(rawMsg,signedMsgRSV,from)
+    {
+      return new Promise((resolve,reject) => {
+        try{
+            
+            let data={
+                      "data": {
+                        "attributes": {
+                          "companyId": 21,
+                          "signedRsv":signedMsgRSV,
+                          "publicToken": from,
+                          "rawMsg":rawMsg
+                        }
+                      }
+                    }
+            console.log("Hello",JSON.stringify(data))
+            axios.post(this.urlToValidateSign,data)
+            .then(e=> {
+              resolve(e)
+            })
+            .catch(e =>{
+              Toast.create.negative('Error =' + e)  
+              resolve(false)
+            })
+
+            
+        }
+        catch(err){
+          Toast.create.negative('Error =' + err)  
+          resolve(false)
+        }
+        
+       });
     }
   },
   computed: {
