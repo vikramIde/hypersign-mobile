@@ -98,6 +98,8 @@ export default {
       itemsInStock:store.state,
       userDetails:userStore.state,
       txDetails:txDetailStore.state,
+      urlToValidateSign:'https://obscure-woodland-78571.herokuapp.com/appLogin',
+      urlToNotifyTransaction:'https://obscure-woodland-78571.herokuapp.com/notifyTx'
     }
 
   },

@@ -86,7 +86,7 @@ export default {
     return {
         //itemsInStock:store.state,
         form:{username:'',password:'',email:''},
-        urlToRegister:'http://localhost:3000/appRegister'
+        urlToRegister:'https://obscure-woodland-78571.herokuapp.com/appRegister'
     }
   },
   methods: {
@@ -114,14 +114,14 @@ export default {
                 Router.replace({ path: '/' })
             })
             .catch((err)=>{
-              console.error(err)
+              Toast.create.negative('Error =' + err)  
             })
         }).catch((err) => {
-          console.log('Promise rejected. Err = ' + err);  
+          Toast.create.negative('Error =' + err)  
         })
       })
       .catch((err) => {
-        console.log('Promise rejected. Err = ' + err);  
+        Toast.create.negative('Error =' + err)  
       })
     },
     registerApiCall(addresses){
@@ -139,20 +139,20 @@ export default {
                 }
               }
             }
-
             axios.post(this.urlToRegister,data)
             .then(e=> {
               addUserDet(addresses,this.form)
               resolve(true)
             })
             .catch(e =>{
-              console.error(e)
+              Toast.create.negative('Error =' + e)  
               resolve(false)
             })
 
             
         }
         catch(err){
+          Toast.create.negative('Error =' + err)  
           resolve(false)
         }
         
