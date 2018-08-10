@@ -7,8 +7,8 @@
   </div>
   <!-- Navigation Tabs -->
   <q-tabs slot="navigation">
-    <q-tab icon="alarm" route="/wallet" exact replace>Wallet</q-tab>
-    <q-tab icon="alarm" route="/signtx" exact replace>Scan QR</q-tab>
+    <q-tab icon="account_balance_wallet" route="/wallet" exact replace>Wallet</q-tab>
+    <q-tab icon="line_weight" route="/signtx" exact replace>Scan QR</q-tab>
     <!-- <q-tab icon="help" route="/help" exact replace>Profile</q-tab>
     <q-tab icon="help" route="/sync" exact replace>sync</q-tab> -->
   </q-tabs>
@@ -103,7 +103,6 @@ export default {
   },
   methods:{
     scanQrLogin () {
-      debugger
       let  that = this;
       cordova.plugins.barcodeScanner.scan( 
         function (result) {          
