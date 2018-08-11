@@ -61,7 +61,8 @@
     direction="up"
     style="right: 18px; bottom: 18px;"
   >
-    <q-small-fab class="purple" @click.native="scanQrLogin('mail')" icon="phonelink_ring"></q-small-fab>
+    <q-small-fab class="purple" @click.native="scanQrLogin('mail')" icon="phonelink_ring"></q-small-fab> 
+    <!--<q-small-fab class="purple" @click.native="signMessageTx('mail')" icon="phonelink_ring"></q-small-fab>-->
     <q-small-fab class="secondary" @click.native="scanQrTransaction('alarm')" icon="payment"></q-small-fab>
   </q-fab>
 
@@ -81,6 +82,8 @@ import userStore from '../stores/user-store'
 import txDetailStore from '../stores/tx-store'
 import hsWallet from '../utils/hypersign-wallet'
 import axios from 'axios'
+var CryptoJS = require("crypto-js");
+
 function addTxDet(txdetail) {
   let id = Math.random().toString(36).substr(2, 9)
 
@@ -111,9 +114,9 @@ export default {
           if(result.text !='')
           { 
             try{
-                Toast.create.negative('Error : ' + result.text)
-                let qrData = JSON.parse(result.text);
-                that.signTransaction(qrData)
+                Toast.create.positive('Text on QR scan : ' + result.text)
+                // let qrData = JSON.parse(result.text);
+                that.signMessageTx(result.text)
                 //addTxDet(qrData)
             }
             catch(err){
@@ -140,8 +143,10 @@ export default {
       cordova.plugins.barcodeScanner.scan( 
         function (result) {          
           if(result.text !='')
-          {   
-            that.signTransaction(result.text)
+          { 
+            Toast.create.positive('Tx : ' + result.text)
+            let qrData = that.processRawTxFromQR(result.text)
+            that.signRawTx(qrData)
             // addTxDet(result.text)
           }
         },
@@ -158,17 +163,25 @@ export default {
         }
       )
     },
-    signTransaction(rawMsg){
+    processRawTxFromQR(rawTx){
+      // rawTx = "U2FsdGVkX1+jLpz6rG+IZdATG1GgoF72KHrb29aoGNMwvSv3azuDV1Mjzrnqfz7rwfR7fwkMJPNHT2OxjVJ8BZh/TwNvpSKfKCMZt53RyCUoqwxpZ2MyZ7ZoKQf5+X1cnqdpaWIwvY3+M5Dhir+2hJnXfsTEbOENYOxDG78dW/JTaNDWpKtgvhzeses+QngmHoYzdSOAPxqn60+Q3bghHPp2y2nJ8gv1kAvxPWuqV8nqzqhLGPOybekkl2QwxCQcw/IJXtg4xn/LqCWobV/9jhtiyTuTHnH5zdyDhoZlqSoo1vA6PYnj6BFKZgEjDgNOZzH0L0CcuGUCrG+iDiU+MXu9+CbxCOZ0kQb0w8QkTpBtrGlW/LsSf8AV26kzDVA/+mpI7ESyJoXzdR3W3HoL5w=="
+
+      var bytes  = CryptoJS.AES.decrypt(rawTx, 'secret key 123');
+      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+      let qrData = JSON.parse(plaintext).rawTx
+      return qrData
+    },
+    signMessageTx(rawMsg){
       // debugger
-       rawMsg = {"message":"Hello"}
-      let rawMsgDup = JSON.stringify(rawMsg)
+      // rawMsg = {"message":"Hello"}
+      // rawMsg = JSON.stringify(rawMsg)
       let from = this.userDetails.public_key
       if(from && rawMsg){
         Loading.show()
-        let signingPromise = hsWallet.signMessageTx(from,rawMsgDup)
+        let signingPromise = hsWallet.signMessageTx(from,rawMsg)
         signingPromise.then((res) => {
           let signedMsgRSV = res
-          this.verifyMessageApiCall(rawMsgDup, signedMsgRSV, from)
+          this.verifyMessageApiCall(rawMsg, signedMsgRSV, from)
           .then((res) =>{
             Loading.hide()
             if(res) Toast.create.positive('Message successfully signed.')
@@ -181,6 +194,40 @@ export default {
           Loading.hide()
         })
         .catch((err) => {
+          Toast.create.negative('Error : in catch : Message =  ' + err)
+          Loading.hide()
+        })
+      }else{
+        console.log('Error : from or rawMsg is empty.')
+        Toast.create.negative('Error : from or rawMsg is empty.')
+      }
+    },
+    signRawTx(rawMsg){
+      
+      //debugger
+      rawMsg = this.processRawTxFromQR(rawMsg)
+      let from = this.userDetails.public_key
+      if(from && rawMsg){
+        Loading.show()
+        let signingPromise = hsWallet.signTx(from,rawMsg)
+        signingPromise.then((res) => {
+          Toast.create.positive('Transaction signed : ' + res)
+          let signedMsgRSV = res
+          this.notifyTxApiCall(rawMsg, signedMsgRSV, from)
+          .then((res) =>{
+            Loading.hide()
+            if(res) Toast.create.positive('Message successfully signed.')
+          } , (err) => {
+            if(!err) Toast.create.negative('Error : Promise rejected in verify.')
+            Loading.hide()
+          })
+        }, (err) => {
+          //debugger
+          Toast.create.negative('Error : ' + err)
+          Loading.hide()
+        })
+        .catch((err) => {
+          //debugger
           Toast.create.negative('Error : in catch : Message =  ' + err)
           Loading.hide()
         })
@@ -206,6 +253,40 @@ export default {
                     }
             console.log("Hello",JSON.stringify(data))
             axios.post(this.urlToValidateSign,data)
+            .then(e=> {
+              resolve(e)
+            })
+            .catch(e =>{
+              Toast.create.negative('Error =' + e)  
+              resolve(false)
+            })
+
+            
+        }
+        catch(err){
+          Toast.create.negative('Error =' + err)  
+          resolve(false)
+        }
+        
+       });
+    },
+    notifyTxApiCall(rawMsg,signedMsgRSV,from)
+    {
+      return new Promise((resolve,reject) => {
+        try{
+            
+            let data={
+                      "data": {
+                        "attributes": {
+                          "companyId": 21,
+                          "signedRsv":signedMsgRSV,
+                          "publicToken": from,
+                          "rawMsg":rawMsg
+                        }
+                      }
+                    }
+            console.log("Hello",JSON.stringify(data))
+            axios.post(this.urlToNotifyTransaction,data)
             .then(e=> {
               resolve(e)
             })

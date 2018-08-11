@@ -74,9 +74,35 @@ var hypersign_wallet = {
                     //code to remove later
                     if('0x' + window.key_Store.addresses[0] != from) {
                         from = '0x' + window.key_Store.addresses[0]
+                        // window.key_Store.addresses[0] = from.slice(2)
                     }
                     //code to remove later
                     let signedMsgRSV = lightwallet.signing.signMsg(window.key_Store, window.pwDerivedKey, rawMsg, from )
+                    if(signedMsgRSV) resolve(signedMsgRSV)
+                    else reject('Error : Error after singMsg call.')
+                }else {
+                    reject('Error : window.pwDerivedKey is null or empty.')        
+                }
+            }else {
+                reject('Error : window.key_Store is null or empty.')    
+            }
+        })
+    },
+    signTx(signingAddress,rawTx) {
+        return new Promise((resolve, reject) =>{
+            if(window.key_Store){
+                if(window.pwDerivedKey){
+                    //code to remove later
+                    if('0x' + window.key_Store.addresses[0] != signingAddress) {
+                        signingAddress = '0x' + window.key_Store.addresses[0]
+                        // window.key_Store.addresses[0] = signingAddress.slice(2)
+                    }
+                    //code to remove later
+
+                    //var signTx = function (keystore, pwDerivedKey, rawTx, signingAddress) {
+                    // txutils.createContractTx(fromAddress, txObject)
+                    let rawTxToPass =lightwallet.txutils.createContractTx(signingAddress, rawTx)
+                    let signedMsgRSV = lightwallet.signing.signTx(window.key_Store, window.pwDerivedKey, rawTxToPass.tx, signingAddress )
                     if(signedMsgRSV) resolve(signedMsgRSV)
                     else reject('Error : Error after singMsg call.')
                 }else {
