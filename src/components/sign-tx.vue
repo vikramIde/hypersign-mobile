@@ -205,7 +205,7 @@ export default {
     signRawTx(rawMsg){
       
       //debugger
-      rawMsg = this.processRawTxFromQR(rawMsg)
+      // rawMsg = this.processRawTxFromQR(rawMsg)
       let from = this.userDetails.public_key
       if(from && rawMsg){
         Loading.show()
