@@ -5,3 +5,14 @@ This repo is for hypersign mobile app (UI)
 
 The Application further enables a user to securely sign transactions in decentralised
 environments; the Hyprsign SDK allows easy authentication to the Blockchain.
+
+# Installation
+
+Clone the repo 
+
+cd hypersign-mobile
+
+npm i
+
+npm run dev
+
