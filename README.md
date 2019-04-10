@@ -14,5 +14,8 @@ cd hypersign-mobile
 
 npm i
 
-npm run dev
+npm uninstall -g quasar-cli; npm i -g quasar-cli@0.6.5
+
+quasar dev
+
 
