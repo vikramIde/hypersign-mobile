@@ -1,25 +1,24 @@
-# hypersign-mobile
-This repo is for hypersign mobile app (UI)
+# Hypersign PWA Application
+[Hypersign](http://www.hypermine.in/hypersign/) is a cryptography based SingleSignOn Solution that enables users to securely access [Web/Blockchain/Federated] applications without providing their access credentials [usernames and passwords].
 
+The Application further enables a user to securely sign transactions in decentralized environments; the Hyprsign SDK allows easy authentication to the Blockchain.
 
-**Hypersign** is a cryptography based *SingleSignOn* Solution that enables users to securely access [Web/Blockchain/Federated] applications without providing their access credentials [usernames and passwords].
+## **Installation**
+> Clone, install deps, run server
 
-The Application further enables a user to securely sign transactions in decentralised
-environments; the Hyprsign SDK allows easy authentication to the Blockchain.
+## **Technologies**
+#### [Vue v3.x](https://vuejs.org/)
+#### [Quasar v1.x](https://v1.quasar-framework.org/)
 
-# Installation
+## **Quasar Application Extensions**
+#### [dotenv](https://github.com/quasarframework/app-extension-dotenv)
+#### [qenv](https://github.com/quasarframework/app-extension-qenv)
 
-Clone the repo 
+## **Code Documentation**
+#### JS Doc
 
-cd hypersign-mobile
-
-npm i
-
-npm uninstall -g quasar-cli; npm i -g quasar-cli@0.6.5
-
-quasar dev
-
-
-=======
-## Test
-
+## **Testing**
+> Derived from Quasar's testing application extension. Follow the links for each section for more information
+#### [E2E](http://www.hypermine.in/hypersign/)
+#### [Unit](https://testing.quasar-framework.org/#unit-testing)
+#### [Quality & Security](https://testing.quasar-framework.org/#quality-auditing)
