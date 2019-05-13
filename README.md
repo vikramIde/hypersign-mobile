@@ -8,7 +8,7 @@ The Application further enables a user to securely sign transactions in decentra
 - Install dependancies via yarn or npm
 - Start dev server:
 
-```quasar dev```
+```$ quasar dev```
 
 ## **Technologies**
 #### [Vue v3.x](https://vuejs.org/)
