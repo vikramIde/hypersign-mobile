@@ -4,7 +4,11 @@
 The Application further enables a user to securely sign transactions in decentralized environments; the Hyprsign SDK allows easy authentication to the Blockchain.
 
 ## **Installation**
-> Clone, install deps, run server
+- clone the repo
+- Install dependancies via yarn or npm
+- Start dev server:
+
+```quasar dev```
 
 ## **Technologies**
 #### [Vue v3.x](https://vuejs.org/)
