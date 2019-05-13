@@ -17,11 +17,6 @@
       "scripts"
     ]
   },
-  "@quasar/testing-security": {
-    "options": [
-      "zap_local"
-    ]
-  },
   "@quasar/testing": {
     "harnesses": [
       "unit-jest",
