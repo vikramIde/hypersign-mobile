@@ -1,86 +1,32 @@
 <template lang='pug'>
   q-layout(view="lHh Lpr lFf")
-    q-header(elevated)
-      q-toolbar
-        q-btn(
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu"
-        )
-          q-icon(name="menu")
-
-        q-toolbar-title
-          | Quasar App
-        div
-          | Quasar v{{ $q.version }}
-
-    q-drawer(
-      v-model="leftDrawerOpen"
-      bordered
-      content-class="bg-grey-2"
-    )
-      q-list
-        q-item-label(header)
-          | Essential Links
-        q-item(
-          clickable
-          tag="a"
-          target="_blank"
-          href="http://v1.quasar-framework.org"
-        )
-          q-item-section(avatar)
-            q-icon(name="school")
-          q-item-section
-            q-item-label
-              | Docs
-            q-item-label(caption)
-              | v1.quasar-framework.org
-        q-item(clickable tag="a" target="_blank" href="https://github.com/quasarframework")
-          q-item-section(avatar)
-            q-icon(name="code")
-          q-item-section
-            q-item-label
-              | Github
-            q-item-label(caption)
-              | github.com/quasarframework
-        q-item(clickable tag="a" target="_blank" href="http://chat.quasar-framework.org")
-          q-item-section(avatar)
-            q-icon(name="chat")
-          q-item-section
-            q-item-label
-             | Discord Chat Channel
-            q-item-label(caption)
-             | chat.quasar-framework.org
-        q-item(clickable tag="a" target="_blank" href="https://forum.quasar-framework.org")
-          q-item-section(avatar)
-            q-icon(name="record_voice_over")
-          q-item-section
-            q-item-label
-              | Forumq-item-label
-            q-item-label(caption)
-              | forum.quasar-framework.org
-        q-item(clickable tag="a" target="_blank" href="https://twitter.com/quasarframework")
-          q-item-section(avatar)
-            q-icon(name="rss_feed")
-          q-item-section
-            q-item-label
-              | Twitter
-            q-item-label(caption)
-              | @quasarframework
-
+    q-tabs(align="justify").bg-primary.text-white
+      q-route-tab.in-tab(v-model='tab' name='stockin' icon='arrow_right_alt' to='/stockin' label='In')
+      q-route-tab(v-model='tab' name='stockout' icon='arrow_right_alt' to='/stockout' label='Out')
+      q-route-tab(v-model='tab' name='scan' icon='code' to='/signtx' label='QR scan')
+      q-route-tab(v-model='tab' name='sync' icon='sync' to='/sync' label='Sync')
+      q-route-tab(v-model='tab' name='help' icon='help_outline' to='/help' label='Help')
+      q-btn-dropdown(auto-close='' stretch='' flat='' icon='person' )
+        q-list
+          q-item(to='/auth/register')
+            q-item-section Logoff
+    q-footer
+      q-toolbar-title
+        copy-right
     q-page-container
       router-view
 </template>
 
 <script>
 import { openURL } from 'quasar'
+import copyRight from 'components/CopyRight.vue'
 
 export default {
-  name: 'MyLayout',
+  name: 'Main',
+  components: { copyRight },
   data () {
     return {
+      tab: 'stockin',
       leftDrawerOpen: this.$q.platform.is.desktop
     }
   },
@@ -90,5 +36,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang='stylus'>
+// $
+
++b('in-tab')
+  .q-tab__icon
+    transform rotate(180deg)
 </style>

@@ -6,20 +6,25 @@
       @reset='onReset'
     ).authentication.q-gutter-md
       router-link(to='/')
-        img(src='/statics/logoOutline.png', alt='Logo', height='60').authentication__logo
-      h6 {{ $route.name }} or&nbsp;
-        .inline(v-if='!isRegisterUser', data-cy='userRegLink')
-          | register a&nbsp;
-          router-link(to='/auth/register' class='text-info')
-            | new user.
-        .inline(v-else, data-cy='loginLink')
-          router-link(to='/auth/login' class='text-info') log in.
+        img(src='/statics/hyper-logo-blue.png', alt='Logo', height='180').authentication__logo
+
       q-input(
-        dark
+        v-if='isRegisterUser'
+        lazy-rules
+        outlined
+        autocomplete='name'
+        data-cy='name'
+        label='NAME'
+        type='text'
+        v-model='name'
+        :rules="[val => !!val || '*Field is required']"
+      )
+
+      q-input(
+        v-if='isRegisterUser'
         lazy-rules
         outlined
         autocomplete='email'
-        color='white'
         data-cy='email'
         label='EMAIL'
         type='email'
@@ -27,11 +32,9 @@
         :rules="[val => !!val || '*Field is required', val => val.includes('@') && val.includes('.') || '*Please Provide a valid email']"
       )
       q-input(
-        dark
         lazy-rules
         outlined
         autocomplete="current-password new-password"
-        color='white'
         data-cy='password'
         label='PASSWORD'
         v-model='password'
@@ -46,11 +49,9 @@
           )
       q-input(
         v-if='isRegisterUser'
-        dark
         lazy-rules
         outlined
         autocomplete="new-password"
-        color='white'
         data-cy='verifyPassword'
         label='VERIFY PASSWORD'
         v-model='passwordMatch'
@@ -63,13 +64,20 @@
             :name="isPwd ? 'visibility_off' : 'visibility'"
             @click='isPwd = !isPwd'
           )
-      .flex.justify-end
+      .flex.justify-between
+        span.text-body1 {{ $route.name }} or&nbsp;
+          .inline(v-if='!isRegisterUser', data-cy='userRegLink')
+            | register a&nbsp;
+            router-link(to='/auth/register' class='text-primary')
+              | new user.
+          .inline(v-else, data-cy='loginLink')
+            router-link(to='/auth/login' class='text-primary') log in.
         q-btn(
           data-cy='submit'
-          color='info'
+          color='primary'
           :label='getAuthType'
           :loading='loading'
-          @click='authenticate'
+          @click='onSubmit'
         )
           template(v-slot:loading='')
             q-spinner-gears
@@ -92,6 +100,7 @@ export default {
   },
   data () {
     return {
+      name: null,
       email: null,
       isPwd: true,
       loading: false,

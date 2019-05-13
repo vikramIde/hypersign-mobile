@@ -27,12 +27,14 @@ module.exports = function (ctx) {
 
       components: [
         'QBtn',
+        'QBtnDropdown',
         'QDrawer',
         'QHeader',
         'QForm',
         'QFooter',
         'QScrollArea',
         'QIcon',
+        'QInput',
         'QItem',
         'QItemSection',
         'QItemLabel',
@@ -43,7 +45,9 @@ module.exports = function (ctx) {
         'QToolbar',
         'QToolbarTitle',
         'QRouteTab',
-        'QTabs'
+        'QSpinnerGears',
+        'QTabs',
+        'QTab'
       ],
 
       directives: [

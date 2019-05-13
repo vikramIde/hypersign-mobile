@@ -1,55 +1,24 @@
-<template lang='pug'
-  q-layout(view="hHh Lpr fFf") <!-- Be sure to play with the Layout demo on docs -->
-    q-header(elevated)
-      q-toolbar(
-        q-btn
-          flat
-          round
-          dense
-          icon="menu"
-          @click="leftDrawer = !leftDrawer"
-        )
-        q-toolbar-title
-          Header
-        q-toolbar-title
+<template lang='pug'>
+  q-layout(view="hHh Lpr fFf")
+    q-footer
       q-toolbar
-
-      q-tabs
-        q-route-tab(
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
-        )
-        q-route-tab(
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        )
-      q-tabs
-    q-header
-
-    <!-- (Optional) The Footer -->
-    q-footer
-        Footer
-    q-footer
+        q-toolbar-title.text-subtitle2
+          copy-right
     q-page-container
-      <!-- This is where pages get injected -->
       router-view
-    q-page-container
-
-  q-layout
 </template>
 
-<script
+<script>
+import copyRight from 'components/CopyRight.vue'
 export default {
-  // name: 'LayoutName',
-
+  name: 'LayoutName',
+  components: {
+    copyRight
+  },
   data () {
     return {
       leftDrawer: true
     }
   }
 }
-</script
+</script>
