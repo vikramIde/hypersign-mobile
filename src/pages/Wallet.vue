@@ -1,6 +1,5 @@
 <template lang='pug'>
-  q-page.q-pa-lg
-    | Wallet
+  <q-page class="q-pa-lg"> | Wallet </q-page>
 </template>
 
 <script>

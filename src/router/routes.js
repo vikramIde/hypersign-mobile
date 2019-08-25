@@ -6,10 +6,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Wallet.vue') },
       { path: 'help', component: () => import('pages/Help.vue') },
-      { path: 'signtx', component: () => import('pages/Signtx.vue') },
-      { path: 'stockin', component: () => import('pages/Stockin.vue') },
-      { path: 'stockout', component: () => import('pages/Stockout.vue') },
-      { path: 'sync', component: () => import('pages/Sync.vue') }
+      { path: 'signtx', component: () => import('pages/Signtx.vue') }
     ]
   },
   {

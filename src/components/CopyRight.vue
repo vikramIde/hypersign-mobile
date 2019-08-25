@@ -1,6 +1,6 @@
 <template lang='pug'>
   .text-subtitle2.q-ma-sm
-    | ©2019 Hypermine Technologies
+    | ©2019 Hypermine
 </template>
 
 <script>
