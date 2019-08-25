@@ -29,6 +29,7 @@
     "axios": "^0.18.0",
     "quasar": "^1.0.0-beta.23",
     "vue-i18n": "^7.3.3",
+    "vuelidate": "^0.7.4",
     "web3": "^1.2.1",
     "yoethwallet": "^0.1.2",
     "zxcvbn": "^4.4.2"

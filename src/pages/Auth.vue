@@ -2,7 +2,7 @@
   q-page.q-pa-md
     q-form(
       ref='AuthenticationForm'
-      @submit='onSubmit'
+      @submit='performAuthentication'
       @reset='onReset'
     ).authentication.q-gutter-md
       router-link(to='/')
@@ -61,7 +61,7 @@
           color='primary'
           :label='getAuthType'
           :loading='loading'
-          @click='generate'
+          @click='performAuthentication'
         )
           template(v-slot:loading='')
             q-spinner-gears
@@ -82,36 +82,15 @@ export default {
     getAuthType () {
       return this.isRegisterUser ? 'Register' : 'Login'
     },
-    ...mapState(['wallet', 'user']),
-    password: {
-      get () {
-        return this.user.password
-      },
-      set (val) {
-        this.$store.commit('user/UPDATE_PASSWORD', val)
-      }
-    },
-    name: {
-      get () {
-        return this.user.name
-      },
-      set (val) {
-        this.$store.commit('user/UPDATE_NAME', val)
-      }
-    },
-    email: {
-      get () {
-        return this.user.email
-      },
-      set (val) {
-        this.$store.commit('user/UPDATE_EMAIL', val)
-      }
-    }
+    ...mapState(['wallet', 'user'])
   },
   data () {
     return {
       isPwd: true,
-      loading: false
+      loading: false,
+      password: null,
+      name: null,
+      email: null
     }
   },
   methods: {
@@ -119,37 +98,13 @@ export default {
       'addSeedStore',
       'generate'
     ]),
-    authenticate () {
-      this.loading = true
-      this.checkCredentials()
-      this.performAuthentication()
-        .then((user) => {
-          this.loading = false
-          // If you want to push the user further
-          // into your app uncomment the line below and add your route
-          // this.$router.push('/SOME_AUTHENTICATION_GUARDED_ROUTE')
-          console.log('SUCCESS YOUR CURRENT USER OBJECT FROM FIREBASE IS:', this.$currentUser)
-          this.$q.notify({
-            classes: 'text-weight-bold text-center',
-            color: 'positive',
-            message: `Success. Check your console for your current user object.`
-          })
-          this.resetFormFields()
-        })
-        .catch((error) => {
-          console.error('FAILURE:', error)
-          this.$q.notify({
-            classes: 'text-weight-bold text-center',
-            color: 'negative',
-            message: `Looks like there is an issue: ${error.message}`
-          })
-          this.loading = false
-        })
-    },
+    ...mapActions('user', [
+      'authenticate'
+    ]),
+
     checkCredentials () {
-      if (this.$v.email.$invalid || this.$v.password.$invalid) {
-        this.$v.email.$touch()
-        this.$v.password.$touch()
+      console.log(this.$registerUser)
+      if (this.email === '' || this.password === '') {
         this.$q.notify({
           classes: 'text-weight-bold text-center',
           color: 'negative',
@@ -160,34 +115,39 @@ export default {
         }, 1000)
         throw new Error('Credentials are invalid.')
       }
-      if (this.isRegisterUser && this.$v.passwordMatch.$invalid) {
-        this.$v.password.$touch()
-        this.$v.passwordMatch.$touch()
-        this.$q.notify({
-          classes: 'text-weight-bold text-center',
-          color: 'negative',
-          message: 'Your passwords don\'t match'
-        })
-        setTimeout(() => {
-          this.loading = false
-        }, 1000)
-        throw new Error('Password Mismatch')
-      }
     },
-    onSubmit (callback) {
-      this.generate(callback)
-      alert('Hello')
+    register () {
+      this.loading = true
+      this.$store.commit('user/UPDATE_PASSWORD', this.password)
+      this.$store.commit('user/UPDATE_NAME', this.name)
+      this.$store.commit('user/UPDATE_EMAIL', this.email)
+      this.generate()
+      this.onReset()
+      this.loading = false
+    },
+    login () {
+      this.loading = true
+      this.authenticate(this.password)
+        .then(res => {
+          this.loading = false
+          this.onReset()
+          this.$router.push('/')
+        })
+        .catch(err => {
+          this.loading = false
+          console.error(err)
+        })
     },
     performAuthentication () {
       return this.isRegisterUser
-        ? this.$registerUser(this.email, this.password)
-        : this.$login(this.email, this.password)
+        ? this.register()
+        : this.login()
     },
     onReset () {
       this.email = null
+      this.name = null
       this.password = null
-      this.passwordMatch = null
-      this.$refs.contactForm.resetValidation()
+      this.$refs.AuthenticationForm.resetValidation()
     }
   }
 }
