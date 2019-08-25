@@ -47,23 +47,7 @@
             :name="isPwd ? 'visibility_off' : 'visibility'"
             @click='isPwd = !isPwd'
           )
-      q-input(
-        v-if='isRegisterUser'
-        lazy-rules
-        outlined
-        autocomplete="new-password"
-        data-cy='verifyPassword'
-        label='VERIFY PASSWORD'
-        v-model='passwordMatch'
-        :rules="[val => !!val || '*Field is required', val => val === password || `*Passwords don't match`]"
-        :type="isPwd ? 'password' : 'text'"
-        @keyup.enter='onSubmit(); $event.target.blur()'
-      )
-        template(v-slot:append='')
-          q-icon.cursor-pointer(
-            :name="isPwd ? 'visibility_off' : 'visibility'"
-            @click='isPwd = !isPwd'
-          )
+
       .flex.justify-between
         span.text-body1 {{ $route.name }} or&nbsp;
           .inline(v-if='!isRegisterUser', data-cy='userRegLink')
@@ -77,13 +61,14 @@
           color='primary'
           :label='getAuthType'
           :loading='loading'
-          @click='onSubmit'
+          @click='generate'
         )
           template(v-slot:loading='')
             q-spinner-gears
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Auth',
@@ -96,19 +81,44 @@ export default {
     },
     getAuthType () {
       return this.isRegisterUser ? 'Register' : 'Login'
+    },
+    ...mapState(['wallet', 'user']),
+    password: {
+      get () {
+        return this.user.password
+      },
+      set (val) {
+        this.$store.commit('user/UPDATE_PASSWORD', val)
+      }
+    },
+    name: {
+      get () {
+        return this.user.name
+      },
+      set (val) {
+        this.$store.commit('user/UPDATE_NAME', val)
+      }
+    },
+    email: {
+      get () {
+        return this.user.email
+      },
+      set (val) {
+        this.$store.commit('user/UPDATE_EMAIL', val)
+      }
     }
   },
   data () {
     return {
-      name: null,
-      email: null,
       isPwd: true,
-      loading: false,
-      password: null,
-      passwordMatch: null
+      loading: false
     }
   },
   methods: {
+    ...mapActions('wallet', [
+      'addSeedStore',
+      'generate'
+    ]),
     authenticate () {
       this.loading = true
       this.checkCredentials()
@@ -164,7 +174,10 @@ export default {
         throw new Error('Password Mismatch')
       }
     },
-    onSubmit () {},
+    onSubmit (callback) {
+      this.generate(callback)
+      alert('Hello')
+    },
     performAuthentication () {
       return this.isRegisterUser
         ? this.$registerUser(this.email, this.password)
