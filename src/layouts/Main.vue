@@ -1,18 +1,34 @@
 <template lang='pug'>
-  q-layout(view="lHh Lpr lFf")
-    q-tabs(align="justify").bg-primary.text-white
-      q-route-tab(v-model='tab' name='wallet' icon='account_balance_wallet' to='/' label='Wallet')
-      q-route-tab(v-model='tab' name='scan' icon='security' to='/signtx' label='QR scan')
-      q-route-tab(v-model='tab' name='help' icon='help_outline' to='/help' label='Help')
-      q-btn-dropdown(auto-close='' stretch='' flat='' icon='person' )
-        q-list
-          q-item(to='/auth/register')
-            q-item-section Logoff
-    q-footer
-      q-toolbar-title
-        copy-right
-    q-page-container
-      router-view
+  <q-layout view="lHh Lpr lFf">
+    <q-header elevated class="bg-primary text-white" height-hint="98">
+      <q-toolbar>
+        <q-toolbar-title>
+          <span>HyperSign</span>
+        </q-toolbar-title>
+
+        <q-btn dense flat round icon="mdi-dots-vertical" @click="right = !right" />
+      </q-toolbar>
+    </q-header>
+    <q-drawer show-if-above v-model="right" side="right" bordered>
+      <q-btn-dropdown auto-close="" stretch="" flat="" icon="person">
+        <q-list>
+          <q-item to="/auth/register">
+              <q-item-section>Logoff</q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+    </q-drawer>
+    <q-footer height-hint="98" class="footer-height">
+      <q-tabs class="bg-primary text-white" align="justify" >
+        <q-route-tab v-model="tab" name="wallet" icon="account_balance_wallet" to="/" ></q-route-tab>
+        <q-route-tab v-model="tab" name="scan" icon="security" to="/signtx" ></q-route-tab>
+        <q-route-tab v-model="tab" name="help" icon="help_outline" to="/help" ></q-route-tab>
+      </q-tabs>
+    </q-footer>
+    <q-page-container>
+        <router-view></router-view>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>
@@ -24,8 +40,9 @@ export default {
   components: { copyRight },
   data () {
     return {
-      tab: 'stockin',
-      leftDrawerOpen: this.$q.platform.is.desktop
+      tab: 'wallet',
+      leftDrawerOpen: this.$q.platform.is.desktop,
+      right: false
     }
   },
   methods: {
@@ -36,8 +53,10 @@ export default {
 
 <style lang='stylus'>
 // $
-
 +b('in-tab')
   .q-tab__icon
     transform rotate(180deg)
+.footer-height
+  max-height 50px
+
 </style>

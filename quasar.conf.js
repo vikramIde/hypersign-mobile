@@ -15,9 +15,9 @@ module.exports = function (ctx) {
 
     extras: [
       'roboto-font',
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
       // 'ionicons-v4',
-      // 'mdi-v3',
+      'mdi-v3',
       // 'fontawesome-v5',
       // 'eva-icons'
     ],
@@ -26,11 +26,14 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
 
       components: [
+        'QAvatar',
         'QBtn',
         'QBtnDropdown',
         'QDrawer',
         'QHeader',
         'QForm',
+        'QFab',
+        'QFabAction',
         'QFooter',
         'QScrollArea',
         'QIcon',
@@ -42,6 +45,7 @@ module.exports = function (ctx) {
         'QList',
         'QPageContainer',
         'QPage',
+        'QPageSticky',
         'QToolbar',
         'QToolbarTitle',
         'QRouteTab',
