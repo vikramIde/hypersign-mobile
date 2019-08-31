@@ -1,4 +1,4 @@
-import yoethwallet from 'yoethwallet'
+// import yoethwallet from 'yoethwallet'
 import { Notify } from 'quasar'
 import lightwallet from 'eth-lightwallet'
 
@@ -20,7 +20,8 @@ export function generate ({ state, commit, rootState, dispatch }, value) {
       })
       reject('Password is empty!')
     }
-    let randomSeed = lightwallet.keystore.generateRandomSeed();
+
+    let randomSeed = lightwallet.keystore.generateRandomSeed()
 
     lightwallet.keystore.createVault({
       password: password,
@@ -30,20 +31,20 @@ export function generate ({ state, commit, rootState, dispatch }, value) {
       if (err) reject(err)
       else {
         commit('UPDATE_KEYSTORE', ks)
-        resolve(randomSeed)
         dispatch('newAddress', password)
         dispatch('addSeedStore', randomSeed)
+        resolve(randomSeed)
         this.$router.push('/auth/login')
       }
-      //this.newAddresses(password);
+      // this.newAddresses(password);
     })
   })
 }
 
 export function newAddress ({ state, commit }, password) {
   return new Promise((resolve, reject) => {
-    //debugger
-    if (password == '') {
+    // debugger
+    if (password === '') {
       reject('Password is empty!')
     }
     if (typeof state.keystore.getAddresses !== 'function') {
@@ -52,15 +53,15 @@ export function newAddress ({ state, commit }, password) {
     }
 
     state.keystore.keyFromPassword(password, (err, pwDerivedKey) => {
-      //debugger
+      // debugger
       if (err) reject(err)
       else {
-        let numAddr = 1 //provide number of accounts you want to create
-        state.keystore.generateNewAddress(pwDerivedKey, numAddr);
-        var addresses = state.keystore.getAddresses
+        let numAddr = 1 // provide number of accounts you want to create
+        state.keystore.generateNewAddress(pwDerivedKey, numAddr)
+        var addresses = state.keystore.getAddresses()
         commit('UPDATE_PRIVATEKEY', pwDerivedKey)
         commit('UPDATE_ADDRESS', addresses)
-        resolve(addresses);
+        resolve(addresses)
       }
     })
   })

@@ -122,8 +122,10 @@ export default {
       this.$store.commit('user/UPDATE_NAME', this.name)
       this.$store.commit('user/UPDATE_EMAIL', this.email)
       this.generate()
-      this.onReset()
-      this.loading = false
+        .then(res => {
+          this.onReset()
+          this.loading = false
+        })
     },
     login () {
       this.loading = true

@@ -31,7 +31,6 @@
     "vue-i18n": "^7.3.3",
     "vuelidate": "^0.7.4",
     "web3": "^1.2.1",
-    "yoethwallet": "^0.1.2",
     "eth-lightwallet":"^3.0.1",
     "zxcvbn": "^4.4.2"
   },
