@@ -34,19 +34,35 @@
   </q-list>
   <q-page-sticky position="bottom-right" :offset="[18, 18]">
     <q-fab color="purple" icon="keyboard_arrow_up" direction="up">
-      <q-fab-action color="primary" @click="onClick" icon="mail" />
-      <q-fab-action color="secondary" @click="onClick" icon="alarm" />
+      <q-fab-action color="primary" @click="onClick" icon="phonelink_ring" />
+      <q-fab-action color="secondary" @click="onClick" icon="payment" />
     </q-fab>
   </q-page-sticky>
 </q-page>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Signtx',
+  data () {
+    return {
+      scanText:"Quick Brown Fox Jump Over a Lazy Dog"
+    }
+  },
   methods: {
+    ...mapActions('wallet', [
+      'signMessageTx',
+    ]),
     onClick () {
-      console.log('Clicked on a fab action')
+      this.signMessageTx(this.scanText)
+        .then(res => {
+          console.log(res)
+          alert(res)
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }
