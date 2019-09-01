@@ -81,12 +81,12 @@ export function newAddress ({ state, commit }, password) {
   // })
 }
 
-export function signMessageTx({ state, commit }, rawMsg) {
+export function signMessageTx ({ state, commit }, rawMsg) {
   return new Promise((resolve, reject) => {
     // debugger
     if (state.keystore) {
       if (state.privateKey) {
-        //code to remove later
+        // code to remove later
         let signedMsgRSV = lightwallet.signing.signMsg(state.keystore, state.privateKey, rawMsg, state.address[0])
         if (signedMsgRSV) resolve(signedMsgRSV)
         else reject('Error : Error after singMsg call.')

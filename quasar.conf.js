@@ -6,7 +6,8 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     boot: [
       'i18n',
-      'axios'
+      'axios',
+      'persist-auth'
     ],
 
     css: [
@@ -27,6 +28,7 @@ module.exports = function (ctx) {
 
       components: [
         'QAvatar',
+        'QSeparator',
         'QBtn',
         'QBtnDropdown',
         'QDrawer',

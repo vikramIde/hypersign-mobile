@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 import help from './help'
 import user from './user'
@@ -14,6 +15,12 @@ Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
+    plugins: [createPersistedState({
+      paths: [
+        'user',
+        'wallet'
+      ]
+    })],
     modules: {
       help,
       user,

@@ -6,7 +6,7 @@
       @reset='onReset'
     ).authentication.q-gutter-md
       router-link(to='/')
-        img(src='/statics/hypersign-logo-new.png', alt='Logo', height='180').authentication__logo
+        img(src='/statics/hypersign-logo-new.png', alt='Logo', height='120').authentication__logo
 
       q-input(
         v-if='isRegisterUser'

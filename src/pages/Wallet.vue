@@ -20,14 +20,14 @@
             <p>{{ wallet.address }}</p>
           </div>
         </div>
-        <div class="columns">
+        <!-- <div class="columns">
           <div class="column is-one-quarter">
             <p>Privatekey</p>
           </div>
           <div class="column is-three-quarter" style="max-width:100px">
             <p class="pvt-key">{{ wallet.privateKey }}</p>
           </div>
-        </div>
+        </div> -->
       </div>
       </div>
   </q-page>

@@ -27,11 +27,12 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.0",
+    "eth-lightwallet": "^3.0.1",
     "quasar": "^1.0.0-beta.23",
     "vue-i18n": "^7.3.3",
     "vuelidate": "^0.7.4",
+    "vuex-persistedstate": "^2.5.4",
     "web3": "^1.2.1",
-    "eth-lightwallet":"^3.0.1",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

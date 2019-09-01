@@ -45,20 +45,33 @@
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'Signtx',
+  computed: {
+    ...mapState(['wallet', 'user'])
+  },
   data () {
     return {
-      scanText:"Quick Brown Fox Jump Over a Lazy Dog"
+      scanText: 'Quick Brown Fox Jump Over a Lazy Dog'
     }
   },
   methods: {
     ...mapActions('wallet', [
-      'signMessageTx',
+      'signMessageTx'
     ]),
     onClick () {
       this.signMessageTx(this.scanText)
         .then(res => {
           console.log(res)
-          alert(res)
+          let data = {
+            'data': {
+              'attributes': {
+                'companyId': 21,
+                'signedRsv': res,
+                'publicToken': this.wallet.address[0],
+                'rawMsg': this.scanText
+              }
+            }
+          }
+          console.log(JSON.stringify(data))
         })
         .catch(err => {
           console.error(err)
