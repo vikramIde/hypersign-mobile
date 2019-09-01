@@ -7,7 +7,8 @@ module.exports = function (ctx) {
     boot: [
       'i18n',
       'axios',
-      'persist-auth'
+      'persist-auth',
+      'intercept'
     ],
 
     css: [

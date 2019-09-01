@@ -6,8 +6,8 @@
 //   console.log(store.state)
 //   createPersistedState({
 //     paths: [
-//       'state.wallet',
-//       'state.user'
+//       'wallet',
+//       'user'
 //     ],
 //     storage: {
 //       getItem: key => JSON.stringify(cookies.get(key)),

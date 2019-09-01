@@ -17,7 +17,11 @@
             <p>Address</p>
           </div>
           <div class="column is-three-quarter">
-            <p>{{ wallet.address }}</p>
+            <q-list>
+              <q-item clickable v-ripple :key=index v-for="(item, index) in wallet.address">
+                <q-item-section>{{item}}</q-item-section>
+              </q-item>
+            </q-list>
           </div>
         </div>
         <!-- <div class="columns">
