@@ -1,4 +1,5 @@
 import NProgress from 'nprogress' // Progress
+
 export default ({ router, store, Vue }) => {
   const whiteList = ['/auth/login', '/auth/register'] // whitelist routes
 
