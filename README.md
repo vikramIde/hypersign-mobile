@@ -10,6 +10,20 @@ The Application further enables a user to securely sign transactions in decentra
 
 ```$ quasar dev```
 
+## Fix the bitcore-lib issue
+
+ go to node_modules/bitcore-mnemonic/node_modules/bitcore-lib/index.js and comment following line
+
+ ```
+ // if (version !== undefined) {
+  //   var message = 'More than one instance of bitcore-lib found. ' +
+  //     'Please make sure to require bitcore-lib and check that submodules do' +
+  //     ' not also include their own bitcore-lib dependency.';
+  //   throw new Error(message);
+  // }
+  ```
+  
+
 ## **Technologies**
 #### [Vue v3.x](https://vuejs.org/)
 #### [Quasar v1.x](https://v1.quasar-framework.org/)

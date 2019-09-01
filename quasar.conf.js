@@ -8,7 +8,7 @@ module.exports = function (ctx) {
       'i18n',
       'axios',
       'persist-auth',
-      'intercept'
+      'permissions'
     ],
 
     css: [
