@@ -23,6 +23,9 @@ The Application further enables a user to securely sign transactions in decentra
   // }
   ```
   
+## Generation Signed APK
+
+https://stackoverflow.com/a/26450074/3196956
 
 ## **Technologies**
 #### [Vue v3.x](https://vuejs.org/)
