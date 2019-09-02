@@ -16,12 +16,8 @@
           <div class="column is-one-quarter">
             <p>Address</p>
           </div>
-          <div class="column is-three-quarter">
-            <q-list>
-              <q-item clickable v-ripple :key=index v-for="(item, index) in wallet.address">
-                <q-item-section>{{item}}</q-item-section>
-              </q-item>
-            </q-list>
+          <div class="column is-three-quarter" :key=index v-for="(item, index) in wallet.address">
+            <p class="address">{{item}}</p>
           </div>
         </div>
         <!-- <div class="columns">
@@ -49,6 +45,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.address {
+  text-overflow: ellipsis;
+  max-width: 300px;
+  overflow: hidden;
+}
 .crypto-logo {
   max-height:50px
 }

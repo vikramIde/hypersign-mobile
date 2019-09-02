@@ -29,7 +29,7 @@ module.exports = function (ctx) {
 
       components: [
         'QAvatar',
-        'QSeparator',
+        'QCheckbox',
         'QBtn',
         'QBtnDropdown',
         'QDrawer',
@@ -49,6 +49,7 @@ module.exports = function (ctx) {
         'QPageContainer',
         'QPage',
         'QPageSticky',
+        'QSeparator',
         'QToolbar',
         'QToolbarTitle',
         'QRouteTab',

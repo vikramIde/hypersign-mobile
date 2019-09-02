@@ -3,7 +3,7 @@
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
-          <span>HyperSign</span>
+          <span>Hypersign</span>
         </q-toolbar-title>
 
         <q-btn dense flat round icon="mdi-dots-vertical" @click="right = !right" />
@@ -22,7 +22,7 @@
       <q-tabs class="bg-primary text-white" align="justify" >
         <q-route-tab v-model="tab" name="wallet" icon="account_balance_wallet" to="/" ></q-route-tab>
         <q-route-tab v-model="tab" name="scan" icon="security" to="/signtx" ></q-route-tab>
-        <q-route-tab v-model="tab" name="help" icon="help_outline" to="/help" ></q-route-tab>
+        <q-route-tab v-model="tab" name="info" icon="info" to="/help" ></q-route-tab>
       </q-tabs>
     </q-footer>
     <q-page-container>
