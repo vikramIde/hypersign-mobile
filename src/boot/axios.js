@@ -47,7 +47,7 @@ const defaultInterceptor = store => {
       notif = Notify.create({
         color: 'positive',
         icon: 'mdi-check',
-        message: response.data.msg,
+        message: response.data.data,
         timeout: 1500
       })
       return response
