@@ -1,11 +1,10 @@
 <template lang='pug'>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="bg-primary text-white" height-hint="98">
-      <q-toolbar>
+      <q-toolbar class="text-center">
         <q-toolbar-title>
           <span>Hypersign</span>
         </q-toolbar-title>
-
         <q-btn dense flat round icon="mdi-dots-vertical" @click="right = !right" />
       </q-toolbar>
     </q-header>
