@@ -3,6 +3,36 @@
 
 The Application further enables a user to securely sign transactions in decentralized environments; the Hyprsign SDK allows easy authentication to the Blockchain.
 
+# Installation
+
+## Android 
+
+### Ubuntu 14+
+
+  ```
+    sudo add-apt-repository ppa:nilarimogard/webupd8
+    sudo apt-get update
+    sudo apt-get install android-tools-adb android-tools-fastboot
+  ```
+  After this we will need to add the sdk tools in ANDROID_HOME
+
+  ```
+  locate platform-tools
+  ```
+
+  It should be something like 
+
+  ```
+  /home/vikram/Android/Sdk/platform-tools/
+  ```
+
+  You need to add untill SDK in variable fire the following command
+  
+  ```
+  export ANDROID_HOME=/home/vikram/Android/Sdk
+  export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+  ```
+  
 ## **Installation**
 - clone the repo
 - Install dependancies via yarn or npm
