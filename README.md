@@ -61,6 +61,21 @@ https://stackoverflow.com/a/26450074/3196956
 
 https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store#Android-Publishing
 
+```
+./Contents/Home/bin/keytool -genkey -keystore hypersign-release-key.keystore -alias my_keystone -keyalg RSA -keysize 2048 -validity 10000
+```
+
+```
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore hypersign-release-key.keystore /Users/vikrambhushan/Documents/hypersign-mobile/src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk my_keystone
+```
+
+```
+./zipalign -v 4  /Users/vikrambhushan/Documents/hypersign-mobile/src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk Hypersign.apk
+```
+
+```
+/Users/vikrambhushan/Documents/hypersign-mobile/src-cordova/platforms/android/app/build/outputs/apk/release/
+```
 
 
 ## **Technologies**
