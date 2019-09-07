@@ -57,6 +57,12 @@ The Application further enables a user to securely sign transactions in decentra
 
 https://stackoverflow.com/a/26450074/3196956
 
+### MacOs
+
+https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store#Android-Publishing
+
+
+
 ## **Technologies**
 #### [Vue v3.x](https://vuejs.org/)
 #### [Quasar v1.x](https://v1.quasar-framework.org/)
