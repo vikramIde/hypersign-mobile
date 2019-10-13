@@ -6,7 +6,7 @@
       @reset='onReset'
     ).authentication.q-gutter-md
       router-link(to='/')
-        img(src='/statics/hypersign-logo-new.png', alt='Logo', height='120').authentication__logo
+        img(src='https://raw.githubusercontent.com/vikramIde/hypersign-mobile/v1/vikram/src/assets/Hypersign%20_App_Logo.png', alt='Logo', height='120').authentication__logo
 
       q-input(
         v-if='isRegisterUser'
@@ -36,7 +36,7 @@
         outlined
         autocomplete="current-password new-password"
         data-cy='password'
-        label='PASSWORD'
+        label='PIN'
         v-model='password'
         :rules="[val => !!val || '*Field is required']"
         :type="isPwd ? 'password' : 'text'"

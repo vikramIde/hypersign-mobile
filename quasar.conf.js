@@ -76,10 +76,10 @@ module.exports = function (ctx) {
     build: {
       env: ctx.dev
         ? { // so on dev we'll have
-          API: JSON.stringify('https://488dd554-8978-4b5d-8220-9d4247d5633d.mock.pstmn.io')
+          API: JSON.stringify('https://dev.hs.hypermine.in/keycloak/auth/realms/master/hypersign')
         }
         : { // and on build (production):
-          API: JSON.stringify('https://prod.api.com')
+          API: JSON.stringify('https://dev.hs.hypermine.in/keycloak/auth/realms/master/hypersign')
         },
       scopeHoisting: true,
       // vueRouterMode: 'history',

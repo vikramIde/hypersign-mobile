@@ -1,11 +1,22 @@
 // import yoethwallet from 'yoethwallet'
 import { Notify } from 'quasar'
 import lightwallet from 'eth-lightwallet'
-import auth from '../../api/collections/auth'
+// import auth from '../../api/collections/auth'
 import tx from '../../api/collections/tx'
 
 export function addSeedStore ({ commit }, value) {
   commit('UPDATE_SEEDSTORE', value)
+}
+
+function bufferToString (buf) {
+  var view = new Uint8Array(buf)
+  return Array.prototype.join.call(view, ',')
+}
+// Converts a comma-separated ASCII ordinal string list
+//  back to an ArrayBuffer (see note for bufferToString())
+function stringToBuffer (str) {
+  var arr = str.split(','), view = new Uint8Array(arr)
+  return view.buffer
 }
 
 export function generate ({ state, commit, rootState, dispatch }, value) {
@@ -33,34 +44,37 @@ export function generate ({ state, commit, rootState, dispatch }, value) {
     }, (err, ks) => {
       if (err) reject(err)
       else {
-        commit('UPDATE_KEYSTORE', ks)
+        window.ks = ks
+        commit('UPDATE_KEYSTORE', ks.serialize())
         dispatch('newAddress', password)
           .then(address => {
+            dispatch('addSeedStore', randomSeed)
+            this.$router.push('/')
             let apiObject = {}
             apiObject.username = name
             apiObject.email = email
-            apiObject.publickey = address
-            apiObject.companyid = 'playground'
-            auth.registration(apiObject)
-              .then(res => {
-                if (res.data.status === 'SUCCESS') {
-                  dispatch('addSeedStore', randomSeed)
-                  resolve(randomSeed)
-                  this.$router.push('/auth/login')
-                } else {
-                  Notify.create({
-                    classes: 'text-weight-bold text-center',
-                    color: 'negative',
-                    position: 'top-right',
-                    message: res.data.data
-                  })
-                  reject(res.data.data)
-                }
-              })
-              .catch(err => {
-                console.error(err)
-                reject(true)
-              })
+            apiObject.publickey = address[0]
+            apiObject.companyid = 'master'
+            // auth.registration(apiObject)
+            //   .then(res => {
+            //     if (res.data.status === 'SUCCESS') {
+            //       dispatch('addSeedStore', randomSeed)
+            //       resolve(randomSeed)
+            //       this.$router.push('/')
+            //     } else {
+            //       Notify.create({
+            //         classes: 'text-weight-bold text-center',
+            //         color: 'negative',
+            //         position: 'top-right',
+            //         message: res.data.data
+            //       })
+            //       reject(res.data.data)
+            //     }
+            //   })
+            //   .catch(err => {
+            //     console.error(err)
+            //     reject(true)
+            //   })
           })
       }
       // this.newAddresses(password);
@@ -74,25 +88,32 @@ export function newAddress ({ state, commit }, password) {
     if (password === '') {
       reject('Password is empty!')
     }
-    if (typeof state.keystore.getAddresses !== 'function') {
+
+    let ks = lightwallet.keystore.deserialize(state.keystore)
+    if (typeof ks.getAddresses !== 'function') {
       console.warn('getHexAddress')
       reject('getAddresses is not a function!')
     }
+    ks.keyFromPassword(password, (err, pwDerivedKey) => {
+      if (!ks.isDerivedKeyCorrect(pwDerivedKey)) {
+        throw new Error('Incorrect derived key!')
+      }
 
-    state.keystore.keyFromPassword(password, (err, pwDerivedKey) => {
-      // debugger
       if (err) reject(err)
       else {
         let numAddr = 1 // provide number of accounts you want to create
-        state.keystore.generateNewAddress(pwDerivedKey, numAddr)
-        var addresses = state.keystore.getAddresses()
-        commit('UPDATE_PRIVATEKEY', pwDerivedKey)
+        ks.generateNewAddress(pwDerivedKey, numAddr)
+        var addresses = ks.getAddresses()
+        // var pvtkey = new TextDecoder("utf-8").decode(pwDerivedKey);
+        let str = bufferToString(pwDerivedKey.buffer)
+
+        commit('UPDATE_PRIVATEKEY', str)
         commit('UPDATE_ADDRESS', addresses)
         resolve(addresses)
       }
     })
   })
-  // let wallet = state.keystore
+  // let wallet = ks
   // commit('UPDATE_PRIVATEKEY', wallet.getHexPrivateKey())
   // commit('UPDATE_ADDRESS', wallet.getHexAddress(true))
 
@@ -111,35 +132,59 @@ export function newAddress ({ state, commit }, password) {
 export function signMessageTx ({ state, commit, dispatch }, rawMsg) {
   return new Promise((resolve, reject) => {
     // debugger
-    dispatch('scanQr', rawMsg)
-      .then(rawTextFromQr => {
-        if (state.keystore) {
-          if (state.privateKey) {
-            // code to remove later
-            let signedMsgRSV = lightwallet.signing.signMsg(state.keystore, state.privateKey, rawTextFromQr, state.address[0])
-            if (signedMsgRSV) {
-              let apiObject = {}
-              apiObject.rawMsg = rawTextFromQr
-              apiObject.ksSessionId = signedMsgRSV
-              apiObject.challenge = signedMsgRSV
-              apiObject.signedRsv = signedMsgRSV
-              apiObject.publickey = state.address
-              apiObject.companyid = 'playground'
-              tx
-                .sign(apiObject)
-                .then(res => {
-                  if (res.data.status === 'SUCCESS') {
-                    resolve(signedMsgRSV)
-                  }
-                })
-            } else reject('Error : Error after singMsg call.')
-          } else {
-            reject('Error : state.privateKey is null or empty.')
-          }
-        } else {
-          reject('Error : state.keystore is null or empty.')
+    let rawTextFromQr = '{"kcSessionId":"d393cbbd-d116-4108-9e2d-26ba7300f044", "companyId" : "master", "hsSessionId" : "13546810-ec48-11e9-8599-cdf76fd1f555"}'
+    // let rawTextFromQr = 'Quick Brown Fox Jump Over a Lazy Dog'
+    let ks = lightwallet.keystore.deserialize(state.keystore)
+    // let buf = stringToBuffer(state.privateKey)
+    // let privateKey = new Uint8Array(buf)
+    let privateKey = new Uint8Array(buf)
+    // dispatch('scanQr', rawMsg)
+    //   .then(rawTextFromQr => {
+    if (state.keystore) {
+      if (state.privateKey) {
+        // code to remove later
+        // let ks = window.ks
+        console.log(state, 'state')
+        console.log(state.keystore, 'keystore')
+        console.log(ks, 'ks')
+        console.log(privateKey, 'privateKey')
+        console.log(rawTextFromQr, 'rawTextFromQr')
+        console.log(state.address[0], 'state.address[0]')
+        console.log(typeof ks)
+        console.log(ks.getAddresses())
+        console.log(ks.generateNewAddress(privateKey, 1))
+        // if (typeof ks.keyFromPassword !== 'function') {
+        if (!ks.generateNewAddress(privateKey, 1)) {
+          throw new Error('Incorrect derived key!')
         }
-      })
+        debugger
+        let signedMsgRSV = lightwallet.signing.signMsg(ks, privateKey, rawTextFromQr, state.address[0])
+        if (signedMsgRSV) {
+          let apiObject = {}
+          // debugger
+          let scannedMsg = JSON.parse(rawTextFromQr)
+          debugger
+          apiObject.rawMsg = rawTextFromQr
+          apiObject.ksSessionId = scannedMsg.kcSessionId
+          apiObject.challenge = scannedMsg.hsSessionId
+          apiObject.signedRsv = signedMsgRSV
+          apiObject.publickey = state.address
+          apiObject.companyid = 'master'
+          tx
+            .sign(apiObject)
+            .then(res => {
+              if (res.data.status === 'SUCCESS') {
+                resolve(signedMsgRSV)
+              }
+            })
+        } else reject('Error : Error after singMsg call.')
+      } else {
+        reject('Error : state.privateKey is null or empty.')
+      }
+    } else {
+      reject('Error : ks is null or empty.')
+    }
+    // })
   })
 }
 

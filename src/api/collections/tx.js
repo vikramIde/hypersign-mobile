@@ -11,5 +11,5 @@ export default {
       "challenge" : "62d19600-ccaa-11e9-8e6e-c30f5e42b2be"
       }
     */
-  sign: (payload) => axiosInstance.post('/sign', payload)
+  sign: (payload) => axiosInstance.post('sign', payload)
 }

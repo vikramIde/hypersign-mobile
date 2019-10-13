@@ -1,8 +1,7 @@
 import { axiosInstance } from '../../boot/axios'
+// import fetch from 'node-fetch'
 
 export default {
-  login: (payload) => axiosInstance.post('/api/login', payload),
-
   /**
    * {
     "username":"newuser vishwas",
@@ -11,5 +10,6 @@ export default {
     "companyid" : "playground"
     }
   */
-  registration: (payload) => axiosInstance.post('/register', payload)
+  registration: (payload) => axiosInstance.post('register', payload)
+
 }

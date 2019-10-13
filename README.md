@@ -66,7 +66,7 @@ https://quasar.dev/quasar-cli/developing-cordova-apps/publishing-to-store#Androi
 ```
 
 ```
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore hypersign-release-key.keystore /Users/vikrambhushan/Documents/hypersign-mobile/src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk my_keystone
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/hypersign-release-key.keystore  /Users/vikrambhushan/Documents/hypersign-mobile/src-cordova/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk my_keystone
 ```
 
 ```
